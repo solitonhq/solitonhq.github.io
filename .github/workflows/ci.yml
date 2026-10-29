@@ -27,3 +27,5 @@ jobs:
       - run: npm run check:parity
       - run: npm run build
       - run: npm run check:links
+      - run: npm run check:html
+      - run: npm run check:lighthouse

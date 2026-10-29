@@ -5,14 +5,18 @@
   "type": "module",
   "description": "Source of the Soliton website (https://solitonhq.github.io)",
   "license": "Apache-2.0",
-  "engines": { "node": ">=22" },
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
     "check:parity": "node scripts/check-parity.mjs",
-    "check:links": "node scripts/check-links.mjs"
+    "check:links": "node scripts/check-links.mjs",
+    "check:html": "html-validate \"dist/**/*.html\"",
+    "check:lighthouse": "lhci autorun"
   },
   "dependencies": {
     "@astrojs/sitemap": "3.7.4",
@@ -22,6 +26,8 @@
   },
   "devDependencies": {
     "@astrojs/check": "0.9.12",
+    "@lhci/cli": "0.15.1",
+    "html-validate": "11.17.0",
     "typescript": "6.0.3"
   }
 }
