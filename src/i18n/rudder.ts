@@ -18,13 +18,17 @@ export interface RudderCopy {
   principles: { title: string; body: string }[];
   installTitle: string;
   installBody: string;
+  platforms: { name: string; detail: string; cta?: string; soon?: string }[];
+  installGuide: string;
+  verifyNote: string;
+  allReleases: string;
+  ctaRepo: string;
   requirementsTitle: string;
   requirements: string[];
   roadmapTitle: string;
   roadmapLead: string;
   roadmap: string[];
   demoNote: string;
-  ctaGithub: string;
   back: string;
 }
 
@@ -36,8 +40,8 @@ export const rudder: Record<Locale, RudderCopy> = {
     description: 'Soliton Rudder is a fast desktop IDE for Kubernetes: live tables, troubleshooting, cluster assessments, topology, and cost analysis. Open source, private by design.',
     eyebrow: 'Soliton Rudder',
     lead: 'A fast desktop IDE for Kubernetes. Troubleshoot faster, check cluster health, and see what needs attention before it becomes an incident.',
-    status: 'In development',
-    statusNote: 'Early 0.x. macOS first. Public releases are coming.',
+    status: 'Pre-release',
+    statusNote: 'Version 0.1.0, an early pre-release for macOS. Expect rough edges and fast iteration.',
     shotsTitle: 'See your cluster clearly',
     shotsLead: 'Everything below is a real Soliton Rudder window connected to a local demo cluster.',
     shots: {
@@ -67,14 +71,21 @@ export const rudder: Record<Locale, RudderCopy> = {
       { title: 'Open source', body: 'Licensed under the Apache License 2.0 and developed in the open.' },
     ],
     installTitle: 'Get it',
-    installBody: 'There is no public release yet. When the first version ships, the macOS download and install guide will be linked here and published on GitHub Releases, with checksums and a software bill of materials.',
+    installBody: 'Soliton Rudder 0.1.0 is a pre-release. The macOS build is not yet signed with an Apple Developer ID, so macOS warns the first time you open it. The install guide shows how to open it safely.',
+    platforms: [
+      { name: 'macOS', detail: 'Universal DMG for Apple silicon and Intel, macOS 12 or newer.', cta: 'Download for macOS' },
+      { name: 'Linux', detail: 'Linux builds are planned.', soon: 'Coming soon' },
+    ],
+    installGuide: 'Install guide',
+    verifyNote: 'Every release ships with a SHA-256 checksum, a software bill of materials and a build provenance attestation so you can verify the download.',
+    allReleases: 'All releases',
+    ctaRepo: 'View on GitHub',
     requirementsTitle: 'Requirements',
-    requirements: ['macOS 12 or newer (Apple silicon and Intel)', 'A kubeconfig for the cluster you want to manage', 'Windows and Linux are not available yet'],
+    requirements: ['macOS 12 or newer (Apple silicon and Intel)', 'A kubeconfig for the cluster you want to manage'],
     roadmapTitle: 'What is next',
-    roadmapLead: 'The plan is public once the repository opens. Highlights:',
-    roadmap: ['Applications for Argo CD and Flux, next to Helm and labels', 'Better behaviour on very large clusters', 'Signed and notarised macOS builds', 'More platforms'],
+    roadmapLead: 'The full plan is in the repository. Highlights:',
+    roadmap: ['Applications for Argo CD and Flux, next to Helm and labels', 'Better behaviour on very large clusters', 'Signed and notarised macOS builds', 'Linux'],
     demoNote: 'Screenshots use a local demo cluster with sample workloads; no real clusters or data are shown.',
-    ctaGithub: 'Follow on GitHub',
     back: 'All products',
   },
   tr: {
@@ -82,8 +93,8 @@ export const rudder: Record<Locale, RudderCopy> = {
     description: 'Soliton Rudder, Kubernetes için hızlı bir masaüstü IDE: canlı tablolar, sorun giderme, cluster değerlendirmeleri, topoloji ve maliyet analizi. Açık kaynak, tasarımdan gizlilik odaklı.',
     eyebrow: 'Soliton Rudder',
     lead: 'Kubernetes için hızlı bir masaüstü IDE. Sorunları daha hızlı giderin, cluster sağlığını kontrol edin ve olay çıkmadan önce neyin ilgi beklediğini görün.',
-    status: 'Geliştiriliyor',
-    statusNote: 'Erken 0.x sürüm. Önce macOS. Herkese açık sürümler yolda.',
+    status: 'Ön sürüm',
+    statusNote: 'Sürüm 0.1.0, macOS için erken bir ön sürüm. Pürüzler olabilir, hızlı ilerliyoruz.',
     shotsTitle: 'Cluster’ınızı net görün',
     shotsLead: 'Aşağıdakilerin hepsi, yerel bir demo cluster’a bağlı gerçek Soliton Rudder pencereleridir.',
     shots: {
@@ -113,14 +124,21 @@ export const rudder: Record<Locale, RudderCopy> = {
       { title: 'Açık kaynak', body: 'Apache License 2.0 ile lisanslıdır ve açıkta geliştirilir.' },
     ],
     installTitle: 'Edinin',
-    installBody: 'Henüz herkese açık bir sürüm yok. İlk sürüm yayımlandığında macOS indirme bağlantısı ve kurulum rehberi burada yer alacak; GitHub Releases’te sağlama toplamları ve yazılım malzeme listesiyle birlikte yayımlanacak.',
+    installBody: 'Soliton Rudder 0.1.0 bir ön sürümdür. macOS sürümü henüz Apple Developer ID ile imzalı değil; bu yüzden macOS ilk açılışta uyarı verir. Kurulum rehberi güvenle nasıl açacağınızı gösterir.',
+    platforms: [
+      { name: 'macOS', detail: 'Apple silicon ve Intel için evrensel DMG, macOS 12 veya üstü.', cta: 'macOS için indir' },
+      { name: 'Linux', detail: 'Linux sürümleri planlanıyor.', soon: 'Yakında' },
+    ],
+    installGuide: 'Kurulum rehberi',
+    verifyNote: 'Her sürüm, indirmeyi doğrulayabilmeniz için SHA-256 sağlama toplamı, yazılım malzeme listesi ve derleme kanıtıyla birlikte yayımlanır.',
+    allReleases: 'Tüm sürümler',
+    ctaRepo: 'GitHub’da görüntüle',
     requirementsTitle: 'Gereksinimler',
-    requirements: ['macOS 12 veya üstü (Apple silicon ve Intel)', 'Yönetmek istediğiniz cluster için bir kubeconfig', 'Windows ve Linux henüz mevcut değil'],
+    requirements: ['macOS 12 veya üstü (Apple silicon ve Intel)', 'Yönetmek istediğiniz cluster için bir kubeconfig'],
     roadmapTitle: 'Sırada ne var',
-    roadmapLead: 'Repo açıldığında plan herkese açık olacak. Öne çıkanlar:',
-    roadmap: ['Helm ve label’ların yanında Argo CD ve Flux için Uygulamalar', 'Çok büyük cluster’larda daha iyi davranış', 'İmzalı ve noter onaylı (notarized) macOS sürümleri', 'Daha fazla platform'],
+    roadmapLead: 'Planın tamamı repoda. Öne çıkanlar:',
+    roadmap: ['Helm ve label’ların yanında Argo CD ve Flux için Uygulamalar', 'Çok büyük cluster’larda daha iyi davranış', 'İmzalı ve noter onaylı (notarized) macOS sürümleri', 'Linux'],
     demoNote: 'Ekran görüntüleri örnek iş yüklerine sahip yerel bir demo cluster kullanır; gerçek cluster ya da veri gösterilmez.',
-    ctaGithub: 'GitHub’da takip edin',
     back: 'Tüm ürünler',
   },
 };

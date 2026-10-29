@@ -2,6 +2,9 @@
 export const site = {
   name: 'Soliton',
   githubOrg: 'https://github.com/solitonhq',
+  rudderRepo: 'https://github.com/solitonhq/soliton-rudder',
+  rudderReleases: 'https://github.com/solitonhq/soliton-rudder/releases',
+  rudderInstallGuide: 'https://github.com/solitonhq/soliton-rudder/blob/main/docs/INSTALL.md#opening-an-unsigned-build',
   /** Dedicated project address. Leave null until it exists; the contact page adapts. */
   email: null as string | null,
   social: {

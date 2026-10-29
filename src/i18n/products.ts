@@ -1,6 +1,6 @@
 import type { Locale } from './ui';
 
-export type ProductStatus = 'development' | 'planned';
+export type ProductStatus = 'prerelease' | 'development' | 'planned';
 
 export interface Product {
   slug: 'rudder' | 'term' | 'pass' | 'wiki';
@@ -10,15 +10,15 @@ export interface Product {
 }
 
 export const statusLabel: Record<Locale, Record<ProductStatus, string>> = {
-  en: { development: 'In development', planned: 'Planned' },
-  tr: { development: 'Geliştiriliyor', planned: 'Planlanıyor' },
+  en: { prerelease: 'Pre-release', development: 'In development', planned: 'Planned' },
+  tr: { prerelease: 'Ön sürüm', development: 'Geliştiriliyor', planned: 'Planlanıyor' },
 };
 
 export const products: Product[] = [
   {
     slug: 'rudder',
     name: 'Soliton Rudder',
-    status: 'development',
+    status: 'prerelease',
     copy: {
       en: {
         tagline: 'Kubernetes, steered with confidence.',
