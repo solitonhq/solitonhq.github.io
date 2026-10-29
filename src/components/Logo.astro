@@ -1,0 +1,7 @@
+---
+import { Image } from 'astro:assets';
+import logo from '../assets/logo.png';
+interface Props { size: number; }
+const { size } = Astro.props;
+---
+<Image src={logo} width={size * 2} height={size * 2} widths={[size, size * 2]} sizes={`${size}px`} format="webp" alt="" class="rounded-md" style={`width:${size}px;height:${size}px`} />

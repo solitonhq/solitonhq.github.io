@@ -1,4 +1,5 @@
 ---
+import Logo from './Logo.astro';
 import { localePath, switchLocalePath, t, type Locale } from '../i18n/ui';
 interface Props { locale: Locale; }
 const { locale } = Astro.props;
@@ -7,13 +8,13 @@ const other: Locale = locale === 'en' ? 'tr' : 'en';
 <header class="border-b border-line">
   <div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
     <a href={localePath(locale)} class="flex items-center gap-3 font-semibold tracking-tight">
-      <img src="/favicon.png" width="28" height="28" alt="" class="rounded-md" />
+      <Logo size={28} />
       <span>Soliton</span>
     </a>
     <nav aria-label="Primary" class="flex items-center gap-5 text-sm text-muted">
       <a class="hover:text-fg" href={localePath(locale, '/products/')}>{t(locale, 'nav.products')}</a>
       <a class="hover:text-fg" href="https://github.com/solitonhq" rel="noopener">{t(locale, 'nav.github')}</a>
-      <a class="rounded-md border border-line px-2.5 py-1 text-fg hover:bg-surface" href={switchLocalePath(Astro.url.pathname, other)} hreflang={other} lang={other} aria-label={t(locale, 'lang.label')}>{t(locale, 'lang.switch')}</a>
+      <a class="rounded-md border border-line px-2.5 py-1 text-fg hover:bg-surface" href={switchLocalePath(Astro.url.pathname, other)} hreflang={other} lang={other}>{t(locale, 'lang.switch')}</a>
     </nav>
   </div>
 </header>
