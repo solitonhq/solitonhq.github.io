@@ -1,11 +1,44 @@
 ---
 import { localePath, t, type Locale } from '../i18n/ui';
+import { pages, type PageKey } from '../i18n/pages';
+import { products } from '../i18n/products';
+import { site } from '../site';
 interface Props { locale: Locale; }
 const { locale } = Astro.props;
+const company: PageKey[] = ['about', 'open-source', 'brand', 'contact'];
+const legal: PageKey[] = ['security', 'privacy'];
+const linkClass = 'hover:text-fg';
 ---
 <footer class="border-t border-line">
-  <div class="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-8 text-sm text-muted sm:flex-row sm:justify-between sm:px-6">
-    <p>© {new Date().getFullYear()} {t(locale, 'footer.rights')}</p>
-    <p><a class="hover:text-fg" href={localePath(locale)}>{t(locale, 'site.tagline')}</a></p>
+  <div class="mx-auto max-w-6xl px-4 py-12 sm:px-6">
+    <div class="grid gap-8 text-sm sm:grid-cols-4">
+      <div class="sm:col-span-1">
+        <a href={localePath(locale)} class="flex items-center gap-2 font-semibold">
+          <img src="/favicon.png" width="24" height="24" alt="" class="rounded" />Soliton
+        </a>
+        <p class="mt-3 text-muted">{t(locale, 'site.tagline')}</p>
+      </div>
+      <nav aria-label={t(locale, 'footer.products')}>
+        <h2 class="font-semibold">{t(locale, 'footer.products')}</h2>
+        <ul class="mt-3 space-y-2 text-muted">
+          <li><a class={linkClass} href={localePath(locale, '/products/soliton-rudder/')}>{products[0]!.name}</a></li>
+          <li><a class={linkClass} href={localePath(locale, '/products/')}>{t(locale, 'nav.products')}</a></li>
+        </ul>
+      </nav>
+      <nav aria-label={t(locale, 'footer.company')}>
+        <h2 class="font-semibold">{t(locale, 'footer.company')}</h2>
+        <ul class="mt-3 space-y-2 text-muted">
+          {company.map((k) => <li><a class={linkClass} href={localePath(locale, `/${k}/`)}>{pages[locale][k].title}</a></li>)}
+          <li><a class={linkClass} href={site.githubOrg} rel="noopener">{t(locale, 'nav.github')}</a></li>
+        </ul>
+      </nav>
+      <nav aria-label={t(locale, 'footer.legal')}>
+        <h2 class="font-semibold">{t(locale, 'footer.legal')}</h2>
+        <ul class="mt-3 space-y-2 text-muted">
+          {legal.map((k) => <li><a class={linkClass} href={localePath(locale, `/${k}/`)}>{pages[locale][k].title}</a></li>)}
+        </ul>
+      </nav>
+    </div>
+    <p class="mt-10 text-xs text-muted">© {new Date().getFullYear()} {t(locale, 'footer.rights')}</p>
   </div>
 </footer>
