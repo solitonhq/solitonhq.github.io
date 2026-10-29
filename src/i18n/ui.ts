@@ -102,6 +102,7 @@ export function localePath(locale: Locale, path = '/'): string {
 /** Path of the same page in another locale. */
 export function switchLocalePath(current: string, to: Locale): string {
   const stripped = current.replace(/^\/tr(?=\/|$)/, '') || '/';
+  if (stripped === '/404/') return localePath(to, '/');
   return localePath(to, stripped);
 }
 
