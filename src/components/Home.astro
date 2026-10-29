@@ -1,0 +1,15 @@
+---
+import Base from '../layouts/Base.astro';
+import { t, type Locale } from '../i18n/ui';
+interface Props { locale: Locale; }
+const { locale } = Astro.props;
+---
+<Base title={t(locale, 'home.title')} description={t(locale, 'home.description')}>
+  <section class="mx-auto max-w-6xl px-4 py-24 sm:px-6 sm:py-32">
+    <h1 class="max-w-3xl text-4xl font-semibold tracking-tight sm:text-6xl">{t(locale, 'home.heroTitle')}</h1>
+    <p class="mt-6 max-w-2xl text-lg text-muted">{t(locale, 'home.heroLead')}</p>
+    <div class="mt-10 flex flex-wrap gap-3">
+      <a href="https://github.com/solitonhq" rel="noopener" class="rounded-md border border-line px-5 py-2.5 font-medium hover:bg-surface">{t(locale, 'home.ctaGithub')}</a>
+    </div>
+  </section>
+</Base>

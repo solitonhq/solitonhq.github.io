@@ -1,0 +1,42 @@
+@import 'tailwindcss';
+
+/* Brand: monochrome, taken from the Soliton mark (white on near-black). */
+:root {
+  --bg: #fafafa;
+  --surface: #ffffff;
+  --fg: #0a0a0b;
+  --muted: #5b5b63;
+  --line: #e4e4e7;
+  --accent: #0a0a0b;
+  --accent-fg: #fafafa;
+  color-scheme: light;
+}
+:root:not([data-theme='light']) {
+  @media (prefers-color-scheme: dark) {
+    --bg: #050506;
+    --surface: #0d0d0f;
+    --fg: #f4f4f5;
+    --muted: #a1a1aa;
+    --line: #232327;
+    --accent: #fafafa;
+    --accent-fg: #0a0a0b;
+    color-scheme: dark;
+  }
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-fg: var(--accent-fg);
+  --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+html { background: var(--bg); color: var(--fg); font-family: var(--font-sans); scroll-behavior: smooth; }
+body { min-height: 100dvh; -webkit-font-smoothing: antialiased; }
+:focus-visible { outline: 2px solid var(--fg); outline-offset: 3px; border-radius: 4px; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { animation: none !important; transition: none !important; } }
