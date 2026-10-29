@@ -1,15 +1,52 @@
 ---
 import Base from '../layouts/Base.astro';
-import { t, type Locale } from '../i18n/ui';
+import ProductCard from './ProductCard.astro';
+import { products } from '../i18n/products';
+import { localePath, t, type Locale } from '../i18n/ui';
 interface Props { locale: Locale; }
 const { locale } = Astro.props;
+const principles = [1, 2, 3] as const;
 ---
 <Base title={t(locale, 'home.title')} description={t(locale, 'home.description')}>
   <section class="mx-auto max-w-6xl px-4 py-24 sm:px-6 sm:py-32">
     <h1 class="max-w-3xl text-4xl font-semibold tracking-tight sm:text-6xl">{t(locale, 'home.heroTitle')}</h1>
     <p class="mt-6 max-w-2xl text-lg text-muted">{t(locale, 'home.heroLead')}</p>
     <div class="mt-10 flex flex-wrap gap-3">
+      <a href={localePath(locale, '/products/')} class="rounded-md bg-accent px-5 py-2.5 font-medium text-accent-fg">{t(locale, 'home.ctaProducts')}</a>
       <a href="https://github.com/solitonhq" rel="noopener" class="rounded-md border border-line px-5 py-2.5 font-medium hover:bg-surface">{t(locale, 'home.ctaGithub')}</a>
+    </div>
+  </section>
+
+  <section class="border-t border-line" aria-labelledby="products">
+    <div class="mx-auto max-w-6xl px-4 py-20 sm:px-6">
+      <h2 id="products" class="text-2xl font-semibold tracking-tight">{t(locale, 'home.productsTitle')}</h2>
+      <p class="mt-2 text-muted">{t(locale, 'home.productsLead')}</p>
+      <div class="mt-8 grid gap-4 sm:grid-cols-2">
+        {products.map((p) => <ProductCard product={p} locale={locale} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="border-t border-line" aria-labelledby="philosophy">
+    <div class="mx-auto max-w-6xl px-4 py-20 sm:px-6">
+      <h2 id="philosophy" class="text-2xl font-semibold tracking-tight">{t(locale, 'home.philosophyTitle')}</h2>
+      <p class="mt-2 max-w-2xl text-muted">{t(locale, 'home.philosophyLead')}</p>
+      <div class="mt-8 grid gap-8 sm:grid-cols-3">
+        {principles.map((n) => (
+          <div>
+            <h3 class="font-semibold">{t(locale, `home.principle${n}.title` as const)}</h3>
+            <p class="mt-2 text-sm text-muted">{t(locale, `home.principle${n}.body` as const)}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="border-t border-line" aria-labelledby="oss">
+    <div class="mx-auto max-w-6xl px-4 py-20 sm:px-6">
+      <h2 id="oss" class="text-2xl font-semibold tracking-tight">{t(locale, 'home.oss.title')}</h2>
+      <p class="mt-2 max-w-2xl text-muted">{t(locale, 'home.oss.body')}</p>
+      <a href="https://github.com/solitonhq" rel="noopener" class="mt-6 inline-block rounded-md border border-line px-5 py-2.5 font-medium hover:bg-surface">{t(locale, 'home.ctaGithub')}</a>
     </div>
   </section>
 </Base>

@@ -11,6 +11,7 @@ const other: Locale = locale === 'en' ? 'tr' : 'en';
       <span>Soliton</span>
     </a>
     <nav aria-label="Primary" class="flex items-center gap-5 text-sm text-muted">
+      <a class="hover:text-fg" href={localePath(locale, '/products/')}>{t(locale, 'nav.products')}</a>
       <a class="hover:text-fg" href="https://github.com/solitonhq" rel="noopener">{t(locale, 'nav.github')}</a>
       <a class="rounded-md border border-line px-2.5 py-1 text-fg hover:bg-surface" href={switchLocalePath(Astro.url.pathname, other)} hreflang={other} lang={other} aria-label={t(locale, 'lang.label')}>{t(locale, 'lang.switch')}</a>
     </nav>
