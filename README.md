@@ -13,6 +13,10 @@ npm ci
 npm run dev       # http://localhost:4321
 npm run check     # type-check
 npm run build     # static output in dist/
+npm run check:parity     # every page exists in EN and TR
+npm run check:links      # no broken internal links (after build)
+npm run check:html       # HTML validation (after build)
+npm run check:lighthouse # Lighthouse budgets (after build, needs Chrome)
 ```
 
 ## Structure
@@ -24,8 +28,9 @@ npm run build     # static output in dist/
 | `src/components/`, `src/layouts/` | Shared building blocks |
 | `public/` | Static assets served as-is |
 | `assets/brand/` | Brand source files |
+| `scripts/` | Checks, and `make-og.sh` which regenerates the Open Graph images |
 
-Every page must exist in both languages. The site loads no third-party scripts, fonts or trackers.
+CI runs all of the above. Every page must exist in both languages. The site loads no third-party scripts, fonts or trackers.
 
 ## Contributing
 
