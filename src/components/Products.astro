@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import { products, statusLabel } from '../i18n/products';
-import { t, type Locale } from '../i18n/ui';
+import { localePath, t, type Locale } from '../i18n/ui';
 interface Props { locale: Locale; }
 const { locale } = Astro.props;
 ---
@@ -24,6 +24,9 @@ const { locale } = Astro.props;
               <ul class="mt-4 list-disc space-y-1 pl-5 text-sm text-muted">
                 {c.points.map((x) => <li>{x}</li>)}
               </ul>
+              {p.slug === 'rudder' && (
+                <a class="mt-5 inline-block text-sm font-medium underline underline-offset-4" href={localePath(locale, '/products/soliton-rudder/')}>{t(locale, 'products.learnMore')}</a>
+              )}
             </div>
           </article>
         );
