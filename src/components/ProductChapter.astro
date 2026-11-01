@@ -1,11 +1,12 @@
 ---
 import { Image } from 'astro:assets';
-import { statusLabel, type Feature, type Product } from '../i18n/products';
+import { statusLabel, productPath, type Feature, type Product } from '../i18n/products';
 import { home } from '../i18n/home';
 import { localePath, type Locale } from '../i18n/ui';
+import { repoStats } from '../stats';
 import { site } from '../site';
-interface Props { product: Product; locale: Locale; index: number; /** Replace the product's feature cells, e.g. with the longer list on its own page. */ features?: Feature[]; /** Render as the main content of a detail page (h1, no alternating background). */ page?: boolean }
-const { product: p, locale, index, page = false, features } = Astro.props;
+interface Props { product: Product; locale: Locale; index: number; /** Replace the product's feature cells, e.g. with the longer list on its own page. */ features?: Feature[]; /** Show only the first few feature cells, with a link to the full list on the product page. */ limit?: number; /** Render as the main content of a detail page (h1, no alternating background). */ page?: boolean }
+const { product: p, locale, index, page = false, features, limit } = Astro.props;
 const c = p.copy[locale];
 const h = home[locale].chapter;
 const n = (i: number) => String(i).padStart(2, '0');
@@ -20,6 +21,12 @@ const pulse = Array.from({ length: 86 }, (_, i) => {
   const s = 1 / Math.cosh((x - 170) / 32);
   return `${i ? 'L' : 'M'}${x} ${(100 - s * s * 84).toFixed(1)}`;
 }).join('');
+
+const stats = incoming ? null : await repoStats(p.repo);
+const fmt = new Intl.NumberFormat(locale === 'tr' ? 'tr-TR' : 'en-US');
+const allFeatures = features ?? c.features;
+const shownFeatures = limit ? allFeatures.slice(0, limit) : allFeatures;
+const moreFeatures = limit && !incoming && allFeatures.length > limit;
 
 const title = incoming ? `${p.name} · ${h.incomingWord}` : `${p.name}${p.seo?.version ? ` ${p.seo.version}` : ''}`;
 ---
@@ -80,10 +87,11 @@ const title = incoming ? `${p.name} · ${h.incomingWord}` : `${p.name}${p.seo?.v
     </div>
 
     <div class="grid tk-rv">
-      {(features ?? c.features).map((f, i) => (
+      {shownFeatures.map((f, i) => (
         <div class="cell"><div class="n">{n(i + 1)}</div><h3>{f.title}</h3><p>{f.body}</p></div>
       ))}
     </div>
+    {moreFeatures && <p class="more tk-rv"><a href={localePath(locale, productPath(p))}>{h.allFeatures} ({allFeatures.length}) →</a></p>}
 
     <div class="get tk-rv">
       <div>
@@ -105,6 +113,8 @@ const title = incoming ? `${p.name} · ${h.incomingWord}` : `${p.name}${p.seo?.v
       </div>
       <div class="term" role="group" aria-label={h.detailsLabel}>
         {c.meta.map((m) => <div><span class="k">{m.k}</span><em class:list={[m.accent && 'a']}>{m.v}</em></div>)}
+        {stats && <div><span class="k">★ {h.stars}</span><em><a href={p.repo} rel="noopener">{fmt.format(stats.stars)}</a></em></div>}
+        {stats && <div><span class="k">↓ {h.downloads}</span><em>{fmt.format(stats.downloads)}</em></div>}
       </div>
     </div>
   </div>
@@ -159,6 +169,9 @@ const title = incoming ? `${p.name} · ${h.incomingWord}` : `${p.name}${p.seo?.v
     .swipe { display: block; }
   }
 
+  .more { margin-top: 18px; font-family: var(--font-mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; }
+  .more a { color: var(--accent); }
+  .more a:hover { text-decoration: underline; }
   .grid { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--line); border-left: 1px solid var(--line); margin-top: 56px; }
   .cell { background: var(--bg); padding: 26px 24px 30px; transition: background .2s; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
   .tk-alt .cell { background: var(--bg-2); }

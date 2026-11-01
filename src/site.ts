@@ -5,7 +5,7 @@ export const site = {
   /** Current Rudder release. Update here and every page, in both languages, follows. */
   rudderVersion: '0.2.0',
   /** Current Soliton Term release. */
-  termVersion: '0.1.0',
+  termVersion: '0.1.1',
   termRepo: 'https://github.com/solitonhq/soliton-term',
   termReleases: 'https://github.com/solitonhq/soliton-term/releases',
   termRoadmap: 'https://github.com/solitonhq/soliton-term/blob/main/ROADMAP.md',
@@ -19,5 +19,5 @@ export const site = {
     linkedin: 'https://www.linkedin.com/in/merthan-telli-915951127',
     bluesky: 'https://bsky.app/profile/davidhayter.bsky.social',
   },
-  lastUpdated: '2026-10-29',
+  lastUpdated: '2026-11-02',
 } as const;

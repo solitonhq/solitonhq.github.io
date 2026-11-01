@@ -1,5 +1,4 @@
 ---
-import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import ProductChapter from './ProductChapter.astro';
 import ProductStrip from './ProductStrip.astro';
@@ -17,8 +16,6 @@ const h = home[locale];
 const numbers = new Map(products.map((p, i) => [p.slug, i + 1]));
 const shipped = products.filter((p) => p.status !== 'incoming');
 const incoming = products.filter((p) => p.status === 'incoming');
-const featured = products.find((p) => p.featured && p.screens?.length);
-const hero = featured?.screens?.[0];
 const [heroA, ...heroB] = t(locale, 'home.heroTitle').split('. ');
 
 ---
@@ -38,19 +35,11 @@ const [heroA, ...heroB] = t(locale, 'home.heroTitle').split('. ');
 
       <div class="strip-wrap tk-rv"><ProductStrip locale={locale} anchors /></div>
 
-      {featured && hero && (
-        <div class="shot tk-rv">
-          <div class="lab"><span>{h.shotLabel} · {featured.name}</span><i></i><span>{statusLabel[locale][featured.status]}</span></div>
-          <div class="frame">
-            <Image src={hero.image} alt={hero.copy[locale].alt} widths={[640, 960, 1280, 1600, 2000]} sizes="(min-width: 1208px) 1110px, calc(100vw - 50px)" loading="eager" fetchpriority="high" />
-          </div>
-        </div>
-      )}
     </div>
   </div>
 
   <div id="tools">
-    {shipped.map((p) => <ProductChapter product={p} locale={locale} index={numbers.get(p.slug)! - 1} />)}
+    {shipped.map((p) => <ProductChapter product={p} locale={locale} index={numbers.get(p.slug)! - 1} limit={4} />)}
     {incoming.length > 0 && <IncomingSection locale={locale} items={incoming} />}
   </div>
 
@@ -62,7 +51,7 @@ const [heroA, ...heroB] = t(locale, 'home.heroTitle').split('. ');
 
 <style>
   /* hero */
-  .hero { position: relative; padding: 90px 0 0; overflow: hidden; }
+  .hero { position: relative; padding: 90px 0 40px; overflow: hidden; }
   #wave { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
   .hero::after { content: ''; position: absolute; inset: auto 0 0 0; height: 220px; background: linear-gradient(transparent, var(--bg)); pointer-events: none; z-index: 1; }
   .hero-in { position: relative; z-index: 2; }
@@ -72,11 +61,6 @@ const [heroA, ...heroB] = t(locale, 'home.heroTitle').split('. ');
   .cta { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 36px; }
 
   .strip-wrap { margin-top: 56px; position: relative; z-index: 3; }
-  .shot { position: relative; margin-top: 56px; z-index: 2; margin-bottom: -100px; }
-  .shot .lab { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; font-family: var(--font-mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--dim); }
-  .shot .lab i { flex: 1; height: 1px; background: var(--line); }
-  .frame { border: 1px solid var(--line-2); background: var(--surface); box-shadow: 0 60px 120px -30px rgba(0, 0, 0, .9), 0 0 120px -40px color-mix(in srgb, var(--accent) 35%, transparent); -webkit-mask-image: linear-gradient(#000 35%, transparent 78%); mask-image: linear-gradient(#000 35%, transparent 78%); }
-  .frame :global(img) { width: 100%; height: auto; display: block; }
   #tools > :global(section:first-child) { padding-top: 120px; }
 
 </style>

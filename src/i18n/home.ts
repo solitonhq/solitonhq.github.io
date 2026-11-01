@@ -22,6 +22,9 @@ export interface HomeCopy {
     swipe: string;
     detailsLabel: string;
     incomingWord: string;
+    allFeatures: string;
+    stars: string;
+    downloads: string;
   };
   approach: { eyebrow: string; title: string; lead: string; pillars: { title: string; body: string }[]; diagramAlt: string };
   notify: {
@@ -61,6 +64,9 @@ export const home: Record<Locale, HomeCopy> = {
       demoNote: 'Screens come from a local demo cluster with sample workloads. No real data is shown.',
       detailsLabel: 'Details',
       incomingWord: 'incoming',
+      allFeatures: 'All features',
+      stars: 'GitHub stars',
+      downloads: 'Downloads',
     },
     approach: {
       eyebrow: 'Approach',
@@ -116,6 +122,9 @@ export const home: Record<Locale, HomeCopy> = {
       demoNote: 'Ekranlar, örnek iş yükleri olan yerel bir demo cluster’dan alınmıştır. Gerçek veri gösterilmez.',
       detailsLabel: 'Ayrıntılar',
       incomingWord: 'yolda',
+      allFeatures: 'Tüm özellikler',
+      stars: 'GitHub yıldızı',
+      downloads: 'İndirme',
     },
     approach: {
       eyebrow: 'Yaklaşım',
