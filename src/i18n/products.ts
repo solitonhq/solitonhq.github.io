@@ -73,6 +73,8 @@ export interface Product {
   screens?: Screen[];
   /** Buttons for products that can be downloaded. Incoming products get a notify button automatically. */
   actions?: Action[];
+  /** Overrides the default note under the screenshots. */
+  demoNote?: Record<Locale, string>;
   copy: Record<Locale, ProductCopy>;
 }
 
@@ -82,6 +84,14 @@ export const statusLabel: Record<Locale, Record<ProductStatus, string>> = {
 };
 
 const images = import.meta.glob<{ default: ImageMetadata }>('../assets/rudder/*.png', { eager: true });
+const termImages = import.meta.glob<{ default: ImageMetadata }>('../assets/term/*.png', { eager: true });
+const termShot = (k: string, en: [string, string, string], tr: [string, string, string]): Screen => ({
+  image: termImages[`../assets/term/${k}.png`]!.default,
+  copy: {
+    en: { label: en[0], alt: en[1], body: en[2] },
+    tr: { label: tr[0], alt: tr[1], body: tr[2] },
+  },
+});
 const shot = (k: ShotKey): Screen => ({
   image: images[`../assets/rudder/${k}.png`]!.default,
   copy: {
@@ -95,9 +105,33 @@ export const products: Product[] = [
     slug: 'term',
     name: 'Soliton Term',
     short: 'Term',
-    status: 'released',
+    status: 'prerelease',
     repo: site.termRepo,
     seo: { os: 'macOS 13 or later', license: 'https://www.apache.org/licenses/LICENSE-2.0', version: site.termVersion, downloadUrl: site.termReleases },
+    screens: [
+      termShot('01-workspace',
+        ['Workspace', 'Soliton Term: folder tree, an SSH session and the quick-copy bar', 'A folder tree of servers, an SSH session in a tab and the quick-copy bar for the active host.'],
+        ['Çalışma alanı', 'Soliton Term: klasör ağacı, bir SSH oturumu ve hızlı kopyalama çubuğu', 'Sunucuların klasör ağacı, bir sekmede SSH oturumu ve aktif sunucu için hızlı kopyalama çubuğu.']),
+      termShot('02-command-palette',
+        ['⌘K palette', '⌘K command palette', 'Connect, copy a vault secret or run a snippet without leaving the keyboard.'],
+        ['⌘K paleti', '⌘K komut paleti', 'Bağlanın, kasadan bir sırrı kopyalayın veya bir snippet çalıştırın; klavyeden ayrılmadan.']),
+      termShot('03-multi-exec',
+        ['Multi-Exec', 'Multi-Exec on four servers', 'One command on several servers, each pane answers for itself.'],
+        ['Multi-Exec', 'Dört sunucuda Multi-Exec', 'Tek komut birden çok sunucuda; her panel kendi yanıtını verir.']),
+      termShot('04-snippets',
+        ['Snippets', 'Snippet library beside a running session', 'A library of reusable commands next to the terminal, ready to run on the active server.'],
+        ['Snippet’ler', 'Çalışan bir oturumun yanında snippet kütüphanesi', 'Terminalin yanında, aktif sunucuda çalıştırmaya hazır yeniden kullanılabilir komutlar.']),
+      termShot('05-parametric-snippet',
+        ['Parametric snippets', 'Parametric snippet runner', '{{variables}} are asked for before the command runs, with a live preview.'],
+        ['Parametrik snippet’ler', 'Parametrik snippet çalıştırıcı', '{{değişkenler}} komut çalışmadan önce sorulur, canlı önizlemeyle.']),
+      termShot('06-light-theme',
+        ['Light theme', 'Light theme', 'Three app themes and eleven terminal palettes.'],
+        ['Açık tema', 'Açık tema', 'Üç uygulama teması ve on bir terminal paleti.']),
+    ],
+    demoNote: {
+      en: 'Screens show the real app connected to a local, scripted demo SSH server. No real hosts or credentials are shown.',
+      tr: 'Ekranlar, yerel ve senaryolu bir demo SSH sunucusuna bağlı gerçek uygulamayı gösterir. Gerçek sunucu ya da kimlik bilgisi gösterilmez.',
+    },
     actions: [
       { label: { en: 'Download for macOS', tr: 'macOS için indir' }, href: site.termReleases, primary: true, external: true },
       { label: { en: 'Roadmap', tr: 'Yol haritası' }, href: site.termRoadmap, external: true },

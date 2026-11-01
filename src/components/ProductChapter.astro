@@ -55,7 +55,7 @@ const title = incoming ? `${p.name} · ${h.incomingWord}` : `${p.name}${p.seo?.v
               <p class="scap"><strong>{s.copy[locale].label}.</strong> {s.copy[locale].body}</p>
             </div>
           ))}
-          <p class="demo">{h.demoNote}</p>
+          <p class="demo">{p.demoNote?.[locale] ?? h.demoNote}</p>
         </div>
       ) : (
         <div class="teaser" role="img" aria-label={`${p.name} ${h.teaserLabel}`}>
