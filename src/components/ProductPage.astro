@@ -1,0 +1,56 @@
+---
+import Base from '../layouts/Base.astro';
+import ProductChapter from './ProductChapter.astro';
+import ProductStrip from './ProductStrip.astro';
+import Notify from './Notify.astro';
+import { products, type Product } from '../i18n/products';
+import { home } from '../i18n/home';
+import { localePath, type Locale } from '../i18n/ui';
+interface Props { locale: Locale; product: Product; }
+const { locale, product } = Astro.props;
+const h = home[locale].product;
+const c = product.copy[locale];
+const index = products.findIndex((p) => p.slug === product.slug);
+---
+<Base title={product.name} description={`${c.tagline} ${c.description}`}>
+  <script is:inline>document.documentElement.classList.add('js')</script>
+
+  <div class="tk-wrap crumb">
+    <a href={localePath(locale, '/products/')}>← {h.back}</a>
+  </div>
+
+  <ProductChapter product={product} locale={locale} index={index} page />
+
+  <section class="tk-section tk-rule tk-alt more">
+    <div class="tk-wrap">
+      <div class="tk-eyebrow">{h.moreTools}</div>
+      <div class="gap"><ProductStrip locale={locale} exclude={product.slug} /></div>
+    </div>
+  </section>
+
+  <Notify locale={locale} />
+</Base>
+
+<style>
+  .crumb { padding-top: 40px; font-family: var(--font-mono); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; }
+  .crumb a { color: var(--muted); }
+  .crumb a:hover { color: var(--fg); }
+  .more { padding: 90px 0; }
+  .gap { margin-top: 28px; }
+</style>
+
+<script>
+  // Reveal sections as they scroll into view. Anything already on screen opens immediately.
+  const els = [...document.querySelectorAll('.tk-rv')];
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const open = (el: Element) => el.classList.add('in');
+  if (reduce || !('IntersectionObserver' in window)) {
+    els.forEach(open);
+  } else {
+    const io = new IntersectionObserver(
+      (entries) => entries.forEach((e) => { if (e.isIntersecting) { open(e.target); io.unobserve(e.target); } }),
+      { threshold: 0.1 },
+    );
+    els.forEach((el) => (el.getBoundingClientRect().top < innerHeight * 0.95 ? open(el) : io.observe(el)));
+  }
+</script>

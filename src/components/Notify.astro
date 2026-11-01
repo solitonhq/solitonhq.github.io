@@ -1,0 +1,42 @@
+---
+import { products } from '../i18n/products';
+import { home } from '../i18n/home';
+import type { Locale } from '../i18n/ui';
+import { site } from '../site';
+interface Props { locale: Locale; }
+const { locale } = Astro.props;
+const h = home[locale].notify;
+const n = (i: number) => String(i).padStart(2, '0');
+const watchable = products.filter((p) => p.repo);
+---
+<section id="notify" class="tk-section tk-rule notify">
+  <div class="tk-wrap tk-rv">
+    <div class="tk-eyebrow c">{h.eyebrow}</div>
+    <h2>{h.title}</h2>
+    <p class="d">{h.lead}</p>
+    <ol class="steps">
+      {h.steps.map((s, i) => <li><span class="idx">{n(i + 1)}</span><b>{s.title}</b><span>{s.body}</span></li>)}
+    </ol>
+    <div class="nacts">
+      <a class="tk-btn primary" href={site.githubOrg} rel="noopener">{h.follow}</a>
+      {watchable.map((p) => <a class="tk-btn" href={p.repo} rel="noopener">{h.watch} {p.name}</a>)}
+    </div>
+    <p class="nnote">{h.note}</p>
+  </div>
+</section>
+
+<style>
+  .notify { text-align: center; background: radial-gradient(ellipse at 50% 0%, color-mix(in srgb, var(--accent) 9%, transparent), transparent 60%); }
+  .notify h2 { font-size: clamp(28px, 4vw, 52px); letter-spacing: -.03em; font-weight: 600; margin: 16px 0 14px; line-height: 1.08; }
+  .notify .d { color: var(--muted); max-width: 54ch; margin: 0 auto 40px; font-size: 18px; }
+  .c { justify-content: center; }
+  .c::before { display: none; }
+  .steps { list-style: none; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); max-width: 860px; margin: 0 auto 36px; text-align: left; }
+  .steps li { background: var(--surface); padding: 22px 24px; display: flex; flex-direction: column; gap: 4px; }
+  .steps .idx { font-family: var(--font-mono); font-size: 11px; letter-spacing: .14em; color: var(--accent); margin-bottom: 18px; }
+  .steps b { font-weight: 600; }
+  .steps li > span:last-child { color: var(--muted); font-size: 14px; }
+  .nacts { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+  .nnote { color: var(--dim); font-size: 13px; margin-top: 22px; font-family: var(--font-mono); letter-spacing: .02em; }
+  @media (max-width: 760px) { .steps { grid-template-columns: 1fr; } }
+</style>

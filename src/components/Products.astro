@@ -1,33 +1,36 @@
 ---
 import Base from '../layouts/Base.astro';
-import { products, statusLabel } from '../i18n/products';
+import { products, productPath, statusLabel } from '../i18n/products';
+import { home } from '../i18n/home';
 import { localePath, t, type Locale } from '../i18n/ui';
 interface Props { locale: Locale; }
 const { locale } = Astro.props;
+const n = (i: number) => String(i).padStart(2, '0');
 ---
 <Base title={t(locale, 'products.title')} description={t(locale, 'products.description')}>
-  <section class="mx-auto max-w-6xl px-4 py-20 sm:px-6">
-    <h1 class="text-4xl font-semibold tracking-tight">{t(locale, 'products.title')}</h1>
-    <p class="mt-4 max-w-2xl text-muted">{t(locale, 'products.lead')}</p>
-    <div class="mt-12 divide-y divide-line border-y border-line">
-      {products.map((p) => {
+  <section class="mx-auto max-w-[1160px] px-6 py-16 sm:py-24">
+    <div class="tk-eyebrow">Soliton</div>
+    <h1 class="mt-4 text-4xl font-semibold tracking-tight sm:text-6xl">{t(locale, 'products.title')}</h1>
+    <p class="mt-5 max-w-2xl text-lg text-muted">{t(locale, 'products.lead')}</p>
+
+    <div class="mt-14 grid gap-px border border-line bg-line sm:grid-cols-2">
+      {products.map((p, i) => {
         const c = p.copy[locale];
         return (
-          <article id={p.slug} class="grid scroll-mt-8 gap-6 py-10 md:grid-cols-[1fr_1.4fr]">
-            <div>
-              <h2 class="text-2xl font-semibold tracking-tight">{p.name}</h2>
-              <p class="mt-2 text-sm text-muted">{t(locale, 'products.status')}: {statusLabel[locale][p.status]}</p>
+          <article id={p.slug} class="card relative flex scroll-mt-20 flex-col bg-bg p-7 transition-colors hover:bg-surface">
+            <div class="flex items-center justify-between gap-3">
+              <span class="font-mono text-[11px] tracking-[.14em] text-dim">{n(i + 1)}</span>
+              <span class:list={['tk-tag', p.status === 'incoming' ? 'soon' : 'live']}>{statusLabel[locale][p.status]}</span>
             </div>
-            <div>
-              <p class="text-lg font-medium">{c.tagline}</p>
-              <p class="mt-2 text-muted">{c.description}</p>
-              <ul class="mt-4 list-disc space-y-1 pl-5 text-sm text-muted">
-                {c.points.map((x) => <li>{x}</li>)}
-              </ul>
-              {p.page && (
-                <a class="mt-5 inline-block text-sm font-medium underline underline-offset-4" href={localePath(locale, p.page)}>{t(locale, 'products.learnMore').replace('{name}', p.name)}</a>
-              )}
-            </div>
+            <h2 class="mt-12 text-2xl font-semibold tracking-tight">
+              <a class="after:absolute after:inset-0" href={localePath(locale, productPath(p))}>{p.name}</a>
+            </h2>
+            <p class="mt-2 font-medium">{c.tagline}</p>
+            <p class="mt-3 text-sm text-muted">{c.description}</p>
+            <ul class="mt-5 space-y-1.5 font-mono text-xs text-dim">
+              {c.points.map((x) => <li><span class="text-accent">› </span>{x}</li>)}
+            </ul>
+            <span class="mt-8 font-mono text-xs uppercase tracking-[.1em] text-muted">{home[locale].product.viewDetails} →</span>
           </article>
         );
       })}

@@ -1,0 +1,36 @@
+---
+import { products, productPath, statusLabel } from '../i18n/products';
+import { home } from '../i18n/home';
+import { localePath, type Locale } from '../i18n/ui';
+interface Props {
+  locale: Locale;
+  /** Link to the home page chapter ("#term") instead of the detail page. */
+  anchors?: boolean;
+  /** Leave one product out, e.g. the one being viewed. */
+  exclude?: string;
+}
+const { locale, anchors = false, exclude } = Astro.props;
+const n = (i: number) => String(i).padStart(2, '0');
+const list = products.map((p, i) => ({ p, i })).filter(({ p }) => p.slug !== exclude);
+---
+<nav class="strip" aria-label={home[locale].toolsLabel}>
+  {list.map(({ p, i }) => (
+    <a class="si" href={anchors ? `#${p.slug}` : localePath(locale, productPath(p))}>
+      <div class="t"><span class="idx">{n(i + 1)}</span><span class:list={['tk-tag', p.status === 'incoming' ? 'soon' : 'live']}>{statusLabel[locale][p.status]}</span></div>
+      <div><b>Soliton <span>{p.short}</span></b><small>{p.copy[locale].tagline}</small></div>
+    </a>
+  ))}
+</nav>
+
+<style>
+  .strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(210px, 100%), 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line-2); position: relative; z-index: 3; }
+  .si { background: rgba(9, 10, 12, .92); padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 14px; position: relative; transition: background .2s; }
+  .si:hover { background: #12141a; }
+  .si::before { content: ''; position: absolute; left: 0; top: 0; width: 0; height: 2px; background: var(--accent); transition: width .35s; }
+  .si:hover::before { width: 100%; }
+  .si .t { display: flex; justify-content: space-between; align-items: center; }
+  .si .idx { font-family: var(--font-mono); font-size: 11px; letter-spacing: .14em; color: var(--dim); }
+  .si b { display: block; font-size: 19px; letter-spacing: -.02em; font-weight: 600; line-height: 1.2; }
+  .si b span { color: var(--muted); font-weight: 400; }
+  .si small { color: var(--muted); font-size: 13px; display: block; margin-top: 4px; }
+</style>

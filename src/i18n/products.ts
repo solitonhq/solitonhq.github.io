@@ -51,8 +51,8 @@ export interface Product {
   status: ProductStatus;
   /** Its first screenshot is shown in the hero. Only one product should set this. */
   featured?: boolean;
-  /** Dedicated site page, when there is one. */
-  page?: string;
+  /** True when the product has a hand-written page under src/pages instead of the generated one. */
+  customPage?: boolean;
   /** Public GitHub repository, once it exists. */
   repo?: string;
   screens?: Screen[];
@@ -127,7 +127,7 @@ export const products: Product[] = [
     short: 'Rudder',
     status: 'prerelease',
     featured: true,
-    page: '/products/soliton-rudder/',
+    customPage: true,
     repo: site.rudderRepo,
     screens: [
       shot(overview, 'overview'),
@@ -298,7 +298,7 @@ export const products: Product[] = [
   },
 ];
 
-/** Where a product's page lives: its own page when it has one, otherwise its chapter on the home page. */
-export function productHref(p: Product, localePath: (path: string) => string): string {
-  return p.page ? localePath(p.page) : `${localePath('/')}#${p.slug}`;
+/** Detail page of a product. Generated for every product unless it sets `customPage`. */
+export function productPath(p: Product): string {
+  return `/products/soliton-${p.slug}/`;
 }

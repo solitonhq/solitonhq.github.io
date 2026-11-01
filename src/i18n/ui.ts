@@ -6,9 +6,9 @@ export const ui = {
   en: {
     'site.tagline': 'Tools shaped by a DevOps engineer’s perspective.',
     'nav.products': 'Products',
-    'nav.tools': 'Tools',
     'nav.approach': 'Approach',
     'nav.brand': 'Brand',
+    'nav.allProducts': 'All products',
     'nav.about': 'About',
     'nav.contact': 'Contact',
     'nav.openSource': 'Open source',
@@ -36,9 +36,9 @@ export const ui = {
   tr: {
     'site.tagline': 'Bir DevOps mühendisinin bakış açısıyla şekillenen araçlar.',
     'nav.products': 'Ürünler',
-    'nav.tools': 'Araçlar',
     'nav.approach': 'Yaklaşım',
     'nav.brand': 'Marka',
+    'nav.allProducts': 'Tüm ürünler',
     'nav.about': 'Hakkında',
     'nav.contact': 'İletişim',
     'nav.openSource': 'Açık kaynak',

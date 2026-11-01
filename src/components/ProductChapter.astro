@@ -3,8 +3,8 @@ import { Image } from 'astro:assets';
 import { statusLabel, type Product } from '../i18n/products';
 import { home } from '../i18n/home';
 import { localePath, type Locale } from '../i18n/ui';
-interface Props { product: Product; locale: Locale; index: number }
-const { product: p, locale, index } = Astro.props;
+interface Props { product: Product; locale: Locale; index: number; /** Render as the main content of a detail page (h1, no alternating background). */ page?: boolean }
+const { product: p, locale, index, page = false } = Astro.props;
 const c = p.copy[locale];
 const h = home[locale].chapter;
 const n = (i: number) => String(i).padStart(2, '0');
@@ -22,14 +22,14 @@ const pulse = Array.from({ length: 86 }, (_, i) => {
 
 const title = incoming ? `${p.name} · ${h.incomingWord}` : p.status === 'released' ? p.name : `${p.name} ${c.meta[0]?.v.split(' ')[0] ?? ''}`.trim();
 ---
-<section class:list={['tk-section', 'tk-rule', index % 2 === 0 && 'tk-alt', 'chapter']} id={p.slug}>
+<section class:list={['tk-section', !page && 'tk-rule', !page && index % 2 === 0 && 'tk-alt', 'chapter', page && 'as-page']} id={p.slug}>
   <div class="tk-wrap">
     <div class="tk-head tk-rv">
       <div class="rhead">
         <div class="tk-eyebrow">{n(index + 1)} · {p.name}</div>
         <span class={`tk-tag ${tagClass}`}>{statusLabel[locale][p.status]}</span>
       </div>
-      <h2>{c.headline}</h2>
+      {page ? <h1>{c.headline}</h1> : <h2>{c.headline}</h2>}
       <p>{c.description}</p>
     </div>
 
@@ -103,6 +103,8 @@ const title = incoming ? `${p.name} · ${h.incomingWord}` : p.status === 'releas
 </section>
 
 <style>
+  .tk-head :global(h1) { font-size: clamp(34px, 5.2vw, 64px); line-height: 1.04; letter-spacing: -.035em; font-weight: 600; margin: 16px 0 18px; }
+  .as-page { padding-top: 48px; }
   .rhead { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
 
   .tabs { display: flex; border: 1px solid var(--line); margin-bottom: 18px; overflow-x: auto; scrollbar-width: none; }

@@ -2,17 +2,17 @@
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import ProductChapter from './ProductChapter.astro';
+import ProductStrip from './ProductStrip.astro';
+import Notify from './Notify.astro';
 import { products, statusLabel } from '../i18n/products';
 import { home } from '../i18n/home';
-import { localePath, t, type Locale } from '../i18n/ui';
+import { t, type Locale } from '../i18n/ui';
 import { site } from '../site';
 interface Props { locale: Locale; }
 const { locale } = Astro.props;
 const h = home[locale];
-const n = (i: number) => String(i).padStart(2, '0');
 const featured = products.find((p) => p.featured && p.screens?.length);
 const hero = featured?.screens?.[0];
-const watchable = products.filter((p) => p.repo);
 const [heroA, ...heroB] = t(locale, 'home.heroTitle').split('. ');
 
 // Soliton formula diagram, drawn at build time.
@@ -21,11 +21,6 @@ const diagram = Array.from({ length: 141 }, (_, i) => {
   const s = 1 / Math.cosh((x - 280) / 38);
   return `${i ? 'L' : 'M'}${x} ${(300 - s * s * 190).toFixed(1)}`;
 }).join('');
-const downloads = [
-  { href: '/brand/soliton-logo.png', label: 'PNG · 868 px' },
-  { href: '/brand/soliton-logo-512.png', label: 'PNG · 512 px' },
-  { href: '/brand/soliton-logo-256.png', label: 'PNG · 256 px' },
-];
 ---
 <Base title={t(locale, 'home.title')} description={t(locale, 'home.description')}>
   <script is:inline>document.documentElement.classList.add('js')</script>
@@ -41,14 +36,7 @@ const downloads = [
         <a class="tk-btn" href={site.githubOrg} rel="noopener">{h.ctaGithub}</a>
       </div>
 
-      <nav class="strip tk-rv" aria-label={h.toolsLabel}>
-        {products.map((p, i) => (
-          <a class="si" href={`#${p.slug}`}>
-            <div class="t"><span class="idx">{n(i + 1)}</span><span class:list={['tk-tag', p.status === 'incoming' ? 'soon' : 'live']}>{statusLabel[locale][p.status]}</span></div>
-            <div><b>Soliton <span>{p.short}</span></b><small>{p.copy[locale].tagline}</small></div>
-          </a>
-        ))}
-      </nav>
+      <div class="strip-wrap tk-rv"><ProductStrip locale={locale} anchors /></div>
 
       {featured && hero && (
         <div class="shot tk-rv">
@@ -87,51 +75,7 @@ const downloads = [
     </div>
   </section>
 
-  <section id="brand" class="tk-section">
-    <div class="tk-wrap">
-      <div class="tk-head tk-rv">
-        <div class="tk-eyebrow">{h.brand.eyebrow}</div>
-        <h2>{h.brand.title}</h2>
-        <p>{h.brand.lead}</p>
-      </div>
-      <div class="brandgrid tk-rv">
-        <div class="logobox"><img src="/brand/soliton-logo-256.png" alt={h.brand.logoAlt} width="168" height="168" loading="lazy" /></div>
-        <div>
-          <div class="bh">{h.brand.colour}</div>
-          <div class="sw">
-            <div><i style="background:#050506"></i><span><b>{h.brand.near}</b>#050506</span></div>
-            <div><i style="background:#fafafa"></i><span><b>{h.brand.white}</b>#FAFAFA</span></div>
-            <div><i style="background:#5cc8ff"></i><span><b>{h.brand.signal}</b>#5CC8FF · {h.brand.proposed}</span></div>
-          </div>
-          <div class="bh">{h.brand.downloads}</div>
-          <div class="dl">
-            {downloads.map((d) => <a href={d.href} download>{d.label}</a>)}
-            <a href={localePath(locale, '/brand/')}>{h.brand.full} →</a>
-          </div>
-          <div class="rules">
-            <div class="y"><h3>{h.brand.doTitle}</h3><ul>{h.brand.dos.map((x) => <li>{x}</li>)}</ul></div>
-            <div class="n"><h3>{h.brand.dontTitle}</h3><ul>{h.brand.donts.map((x) => <li>{x}</li>)}</ul></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="notify" class="tk-section tk-rule notify">
-    <div class="tk-wrap tk-rv">
-      <div class="tk-eyebrow c">{h.notify.eyebrow}</div>
-      <h2>{h.notify.title}</h2>
-      <p class="d">{h.notify.lead}</p>
-      <ol class="steps">
-        {h.notify.steps.map((s, i) => <li><span class="idx">{n(i + 1)}</span><b>{s.title}</b><span>{s.body}</span></li>)}
-      </ol>
-      <div class="nacts">
-        <a class="tk-btn primary" href={site.githubOrg} rel="noopener">{h.notify.follow}</a>
-        {watchable.map((p) => <a class="tk-btn" href={p.repo} rel="noopener">{h.notify.watch} {p.name}</a>)}
-      </div>
-      <p class="nnote">{h.notify.note}</p>
-    </div>
-  </section>
+  <Notify locale={locale} />
 
   <section class="tk-rule oss">
     <div class="tk-wrap tk-rv">
@@ -154,17 +98,7 @@ const downloads = [
   .lede { font-size: clamp(17px, 1.7vw, 21px); color: var(--muted); max-width: 58ch; }
   .cta { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 36px; }
 
-  .strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(210px, 100%), 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line-2); margin-top: 56px; position: relative; z-index: 3; }
-  .si { background: rgba(9, 10, 12, .92); padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 14px; position: relative; transition: background .2s; }
-  .si:hover { background: #12141a; }
-  .si::before { content: ''; position: absolute; left: 0; top: 0; width: 0; height: 2px; background: var(--accent); transition: width .35s; }
-  .si:hover::before { width: 100%; }
-  .si .t { display: flex; justify-content: space-between; align-items: center; }
-  .si .idx { font-family: var(--font-mono); font-size: 11px; letter-spacing: .14em; color: var(--dim); }
-  .si b { display: block; font-size: 19px; letter-spacing: -.02em; font-weight: 600; line-height: 1.2; }
-  .si b span { color: var(--muted); font-weight: 400; }
-  .si small { color: var(--muted); font-size: 13px; display: block; margin-top: 4px; }
-
+  .strip-wrap { margin-top: 56px; position: relative; z-index: 3; }
   .shot { position: relative; margin-top: 56px; z-index: 2; margin-bottom: -100px; }
   .shot .lab { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; font-family: var(--font-mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--dim); }
   .shot .lab i { flex: 1; height: 1px; background: var(--line); }
@@ -181,42 +115,8 @@ const downloads = [
   .pillars span { color: var(--muted); font-size: 15px; }
   @media (max-width: 860px) { .phil { grid-template-columns: 1fr; gap: 40px; } }
 
-  /* brand */
-  .brandgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--line); border: 1px solid var(--line); }
-  .brandgrid > div { background: var(--bg-2); padding: 36px; }
-  .brandgrid > .logobox { display: flex; align-items: center; justify-content: center; min-height: 260px; background: radial-gradient(circle at 50% 40%, #111419, var(--bg) 70%); }
-  .logobox img { width: 168px; height: 168px; }
-  .bh { font-family: var(--font-mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--dim); margin-bottom: 6px; }
-  .sw { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 18px 0 26px; }
-  .sw div { border: 1px solid var(--line-2); }
-  .sw i { display: block; height: 64px; }
-  .sw span { display: block; padding: 8px 10px; font-family: var(--font-mono); font-size: 11px; color: var(--muted); line-height: 1.5; }
-  .sw span b { display: block; color: var(--fg); font-weight: 500; }
-  .dl { display: flex; gap: 10px; flex-wrap: wrap; margin: 12px 0 26px; }
-  .dl a { font-family: var(--font-mono); font-size: 12px; letter-spacing: .04em; border: 1px solid var(--line-2); padding: 8px 12px; color: var(--muted); transition: .15s; }
-  .dl a:hover { color: var(--accent); border-color: var(--accent); }
-  .rules { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; font-size: 14px; color: var(--muted); }
-  .rules h3 { font-family: var(--font-mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; margin-bottom: 10px; font-weight: 500; }
-  .rules .y h3 { color: var(--accent); }
-  .rules .n h3 { color: #e8897a; }
-  .rules li { list-style: none; padding: 5px 0; border-top: 1px solid var(--line); }
-  @media (max-width: 860px) { .brandgrid { grid-template-columns: 1fr; } .brandgrid > div { padding: 26px 20px; } .rules { grid-template-columns: 1fr; } }
-
-  /* notify */
-  .notify { text-align: center; background: radial-gradient(ellipse at 50% 0%, color-mix(in srgb, var(--accent) 9%, transparent), transparent 60%); }
-  .notify h2 { font-size: clamp(28px, 4vw, 52px); letter-spacing: -.03em; font-weight: 600; margin: 16px 0 14px; line-height: 1.08; }
-  .notify .d { color: var(--muted); max-width: 54ch; margin: 0 auto 40px; font-size: 18px; }
   .c { justify-content: center; }
   .c::before { display: none; }
-  .steps { list-style: none; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); max-width: 860px; margin: 0 auto 36px; text-align: left; }
-  .steps li { background: var(--surface); padding: 22px 24px; display: flex; flex-direction: column; gap: 4px; }
-  .steps .idx { font-family: var(--font-mono); font-size: 11px; letter-spacing: .14em; color: var(--accent); margin-bottom: 18px; }
-  .steps b { font-weight: 600; }
-  .steps li > span:last-child { color: var(--muted); font-size: 14px; }
-  .nacts { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
-  .nnote { color: var(--dim); font-size: 13px; margin-top: 22px; font-family: var(--font-mono); letter-spacing: .02em; }
-  @media (max-width: 760px) { .steps { grid-template-columns: 1fr; } }
-
   .oss { text-align: center; padding: 100px 0; }
   .oss h2 { font-size: clamp(26px, 3.4vw, 40px); letter-spacing: -.03em; font-weight: 600; margin: 16px 0 14px; }
   .oss p { color: var(--muted); max-width: 52ch; margin: 0 auto 28px; font-size: 17px; }

@@ -1,18 +1,37 @@
 ---
 import Logo from './Logo.astro';
+import { products, productPath, statusLabel } from '../i18n/products';
 import { localePath, switchLocalePath, t, type Locale, type UIKey } from '../i18n/ui';
 import { site } from '../site';
 interface Props { locale: Locale; }
 const { locale } = Astro.props;
 const other: Locale = locale === 'en' ? 'tr' : 'en';
 const home = localePath(locale);
-const items: { href: string; key: UIKey; external?: boolean }[] = [
-  { href: `${home}#tools`, key: 'nav.tools' },
-  { href: `${home}#approach`, key: 'nav.approach' },
-  { href: `${home}#brand`, key: 'nav.brand' },
-  { href: localePath(locale, '/about/'), key: 'nav.about' },
-  { href: localePath(locale, '/contact/'), key: 'nav.contact' },
-  { href: site.githubOrg, key: 'nav.github', external: true },
+const path = (p: string) => localePath(locale, p);
+
+interface Child { label: string; href: string; hint?: string }
+interface Item { key: UIKey; href: string; external?: boolean; children?: Child[] }
+const items: Item[] = [
+  {
+    key: 'nav.products',
+    href: path('/products/'),
+    children: [
+      ...products.map((p) => ({ label: p.name, href: path(productPath(p)), hint: statusLabel[locale][p.status] })),
+      { label: `${t(locale, 'nav.allProducts')} →`, href: path('/products/') },
+    ],
+  },
+  { key: 'nav.approach' as UIKey, href: `${home}#approach` },
+  {
+    key: 'nav.about',
+    href: path('/about/'),
+    children: [
+      { label: t(locale, 'nav.about'), href: path('/about/') },
+      { label: t(locale, 'nav.brand'), href: path('/brand/') },
+      { label: t(locale, 'nav.openSource'), href: path('/open-source/') },
+    ],
+  },
+  { key: 'nav.contact', href: path('/contact/') },
+  { key: 'nav.github', href: site.githubOrg, external: true },
 ];
 const notify = `${home}#notify`;
 const langHref = switchLocalePath(Astro.url.pathname, other);
@@ -25,7 +44,28 @@ const langHref = switchLocalePath(Astro.url.pathname, other);
     </a>
 
     <nav aria-label="Primary" class="hidden items-center gap-6 text-sm text-muted md:flex">
-      {items.map((i) => <a class="hover:text-fg" href={i.href} rel={i.external ? 'noopener' : undefined}>{t(locale, i.key)}</a>)}
+      {items.map((i) =>
+        i.children ? (
+          <div class="group relative">
+            <a class="flex items-center gap-1 py-4 hover:text-fg group-focus-within:text-fg" href={i.href}>
+              {t(locale, i.key)}
+              <svg class="size-3 opacity-60 transition group-hover:rotate-180 group-focus-within:rotate-180" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5" /></svg>
+            </a>
+            <div class="invisible absolute left-1/2 top-full z-50 w-64 -translate-x-1/2 opacity-0 transition duration-150 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+              <div class="border border-line-2 bg-surface p-1.5 shadow-2xl shadow-black/60">
+                {i.children.map((c) => (
+                  <a class="flex items-center justify-between gap-3 px-3 py-2.5 hover:bg-bg-2 hover:text-fg" href={c.href}>
+                    <span>{c.label}</span>
+                    {c.hint && <span class="font-mono text-[10px] uppercase tracking-[.12em] text-dim">{c.hint}</span>}
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
+        ) : (
+          <a class="hover:text-fg" href={i.href} rel={i.external ? 'noopener' : undefined}>{t(locale, i.key)}</a>
+        ),
+      )}
       <a class="rounded-sm border border-line-2 px-2.5 py-1 text-fg hover:border-fg" href={langHref} hreflang={other} lang={other}>{t(locale, 'lang.switch')}</a>
       <a class="tk-btn primary sm" href={notify}>{t(locale, 'nav.notify')}</a>
     </nav>
@@ -34,8 +74,18 @@ const langHref = switchLocalePath(Astro.url.pathname, other);
       <a class="rounded-sm border border-line-2 px-2.5 py-1 text-sm text-fg" href={langHref} hreflang={other} lang={other}>{t(locale, 'lang.switch')}</a>
       <details class="menu relative">
         <summary class="cursor-pointer list-none rounded-sm border border-line-2 px-3 py-1 text-sm">{t(locale, 'nav.menu')}</summary>
-        <nav aria-label={t(locale, 'nav.menu')} class="absolute right-0 top-full mt-3 flex w-56 flex-col border border-line-2 bg-surface p-2 text-sm shadow-2xl">
-          {items.map((i) => <a class="px-3 py-2.5 text-muted hover:text-fg" href={i.href} rel={i.external ? 'noopener' : undefined}>{t(locale, i.key)}</a>)}
+        <nav aria-label={t(locale, 'nav.menu')} class="absolute right-0 top-full mt-3 flex max-h-[80dvh] w-64 flex-col overflow-y-auto border border-line-2 bg-surface p-2 text-sm shadow-2xl shadow-black/60">
+          {items.map((i) => (
+            <>
+              <a class="px-3 py-2.5 text-fg" href={i.href} rel={i.external ? 'noopener' : undefined}>{t(locale, i.key)}</a>
+              {i.children?.filter((c) => c.href !== i.href).map((c) => (
+                <a class="flex items-center justify-between gap-3 py-2 pl-7 pr-3 text-muted hover:text-fg" href={c.href}>
+                  <span>{c.label}</span>
+                  {c.hint && <span class="font-mono text-[10px] uppercase tracking-[.12em] text-dim">{c.hint}</span>}
+                </a>
+              ))}
+            </>
+          ))}
           <a class="tk-btn primary sm mt-2 justify-center" href={notify}>{t(locale, 'nav.notify')}</a>
         </nav>
       </details>

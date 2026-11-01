@@ -20,24 +20,6 @@ export interface HomeCopy {
     incomingWord: string;
   };
   approach: { eyebrow: string; title: string; lead: string; pillars: { title: string; body: string }[]; diagramAlt: string };
-  brand: {
-    eyebrow: string;
-    title: string;
-    lead: string;
-    colour: string;
-    downloads: string;
-    near: string;
-    white: string;
-    signal: string;
-    proposed: string;
-    svgPlanned: string;
-    logoAlt: string;
-    doTitle: string;
-    dontTitle: string;
-    dos: string[];
-    donts: string[];
-    full: string;
-  };
   notify: {
     eyebrow: string;
     title: string;
@@ -48,6 +30,7 @@ export interface HomeCopy {
     note: string;
   };
   oss: { eyebrow: string; title: string; body: string };
+  product: { back: string; moreTools: string; viewDetails: string; allProducts: string };
 }
 
 export const home: Record<Locale, HomeCopy> = {
@@ -81,24 +64,6 @@ export const home: Record<Locale, HomeCopy> = {
       ],
       diagramAlt: 'A single pulse travelling along a flat line',
     },
-    brand: {
-      eyebrow: 'Brand',
-      title: 'Quiet, sharp, unmistakable.',
-      lead: 'Everything you need to write about Soliton or link to it.',
-      colour: 'Colour',
-      downloads: 'Downloads',
-      near: 'Near-black',
-      white: 'White',
-      signal: 'Signal',
-      proposed: 'accent',
-      svgPlanned: 'SVG · planned',
-      logoAlt: 'Soliton logo: a white geometric serpent head on near-black',
-      doTitle: 'Do',
-      dontTitle: 'Don’t',
-      dos: ['Leave clear space; keep it above 32 px', 'Write “Soliton”, and “Soliton Rudder”, “Soliton Term”…'],
-      donts: ['Recolour, stretch, rotate or add effects', 'Imply endorsement or affiliation'],
-      full: 'Full brand guidelines',
-    },
     notify: {
       eyebrow: 'Stay on the wave',
       title: 'Be the first to know when a tool lands.',
@@ -117,6 +82,7 @@ export const home: Record<Locale, HomeCopy> = {
       title: 'Read it. Run it. Fix it.',
       body: 'Soliton is developed publicly. Issues and pull requests are welcome.',
     },
+    product: { back: 'All products', moreTools: 'More Soliton tools', viewDetails: 'View details', allProducts: 'All products' },
   },
   tr: {
     eyebrow: 'Bir DevOps mühendisinin araç seti',
@@ -148,24 +114,6 @@ export const home: Record<Locale, HomeCopy> = {
       ],
       diagramAlt: 'Düz bir çizgi boyunca ilerleyen tek bir darbe',
     },
-    brand: {
-      eyebrow: 'Marka',
-      title: 'Sakin, keskin, ayırt edilebilir.',
-      lead: 'Soliton hakkında yazmak ya da link vermek için ihtiyacınız olan her şey.',
-      colour: 'Renk',
-      downloads: 'İndirmeler',
-      near: 'Siyaha yakın',
-      white: 'Beyaz',
-      signal: 'Sinyal',
-      proposed: 'vurgu',
-      svgPlanned: 'SVG · planlanıyor',
-      logoAlt: 'Soliton logosu: siyaha yakın zeminde beyaz geometrik bir yılan başı',
-      doTitle: 'Yapın',
-      dontTitle: 'Yapmayın',
-      dos: ['Etrafında boşluk bırakın; 32 px’in altına indirmeyin', '“Soliton”, “Soliton Rudder”, “Soliton Term” şeklinde yazın'],
-      donts: ['Yeniden renklendirmeyin, esnetmeyin, döndürmeyin, efekt eklemeyin', 'Onay ya da bağlantı izlenimi vermeyin'],
-      full: 'Marka rehberinin tamamı',
-    },
     notify: {
       eyebrow: 'Dalgada kal',
       title: 'Bir araç çıktığında ilk siz öğrenin.',
@@ -184,5 +132,6 @@ export const home: Record<Locale, HomeCopy> = {
       title: 'Oku. Çalıştır. Düzelt.',
       body: 'Soliton herkesin gözü önünde geliştirilir. Issue ve pull request’ler memnuniyetle karşılanır.',
     },
+    product: { back: 'Tüm ürünler', moreTools: 'Diğer Soliton araçları', viewDetails: 'Ayrıntıları gör', allProducts: 'Tüm ürünler' },
   },
 };

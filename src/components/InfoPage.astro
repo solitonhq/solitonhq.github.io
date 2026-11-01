@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import BrandKit from './BrandKit.astro';
 import { pages, pageUi, type PageKey } from '../i18n/pages';
 import { localePath, type Locale } from '../i18n/ui';
 import { site } from '../site';
@@ -7,11 +8,6 @@ interface Props { locale: Locale; page: PageKey; }
 const { locale, page } = Astro.props;
 const c = pages[locale][page];
 const u = pageUi[locale];
-const downloads = [
-  { href: '/brand/soliton-logo.png', label: u.sizeOriginal },
-  { href: '/brand/soliton-logo-512.png', label: u.size512 },
-  { href: '/brand/soliton-logo-256.png', label: u.size256 },
-];
 const profiles = [
   { href: site.githubOrg, label: u.github },
   { href: site.social.linkedin, label: u.linkedin },
@@ -19,22 +15,11 @@ const profiles = [
 ];
 ---
 <Base title={c.title} description={c.description}>
-  <article class="mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:py-24">
+  <article class:list={['mx-auto px-4 py-16 sm:px-6 sm:py-24', page === 'brand' ? 'max-w-[1160px] pb-10 sm:pb-12' : 'max-w-3xl']}>
     <h1 class="text-4xl font-semibold tracking-tight sm:text-5xl">{c.title}</h1>
     <p class="mt-6 text-lg text-muted">{c.lead}</p>
 
-    {page === 'brand' && (
-      <div class="mt-10 rounded-xl border border-line bg-surface p-6">
-        <img src="/brand/soliton-logo-256.png" width="128" height="128" alt={u.logoAlt} class="rounded-lg" />
-        <ul class="mt-6 space-y-2 text-sm">
-          {downloads.map((d) => (
-            <li><a class="underline underline-offset-4" href={d.href} download>{u.download}: {d.label}</a></li>
-          ))}
-        </ul>
-      </div>
-    )}
-
-    {c.sections.map((s) => (
+    {page !== 'brand' && c.sections.map((s) => (
       <section class="mt-12">
         <h2 class="text-xl font-semibold tracking-tight">{s.heading}</h2>
         {s.paragraphs?.map((p) => <p class="mt-3 text-muted">{p}</p>)}
@@ -58,4 +43,7 @@ const profiles = [
 
     {page === 'privacy' && <p class="mt-12 text-sm text-muted">{u.updated}: {site.lastUpdated}</p>}
   </article>
+  {page === 'brand' && (
+    <div class="tk-wrap pb-24"><BrandKit locale={locale} /></div>
+  )}
 </Base>
