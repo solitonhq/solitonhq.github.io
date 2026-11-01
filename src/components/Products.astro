@@ -24,8 +24,8 @@ const { locale } = Astro.props;
               <ul class="mt-4 list-disc space-y-1 pl-5 text-sm text-muted">
                 {c.points.map((x) => <li>{x}</li>)}
               </ul>
-              {p.slug === 'rudder' && (
-                <a class="mt-5 inline-block text-sm font-medium underline underline-offset-4" href={localePath(locale, '/products/soliton-rudder/')}>{t(locale, 'products.learnMore')}</a>
+              {p.page && (
+                <a class="mt-5 inline-block text-sm font-medium underline underline-offset-4" href={localePath(locale, p.page)}>{t(locale, 'products.learnMore').replace('{name}', p.name)}</a>
               )}
             </div>
           </article>

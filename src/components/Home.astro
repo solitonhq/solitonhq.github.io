@@ -1,52 +1,281 @@
 ---
+import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
-import ProductCard from './ProductCard.astro';
-import { products } from '../i18n/products';
+import ProductChapter from './ProductChapter.astro';
+import { products, statusLabel } from '../i18n/products';
+import { home } from '../i18n/home';
 import { localePath, t, type Locale } from '../i18n/ui';
+import { site } from '../site';
 interface Props { locale: Locale; }
 const { locale } = Astro.props;
-const principles = [1, 2, 3] as const;
+const h = home[locale];
+const n = (i: number) => String(i).padStart(2, '0');
+const featured = products.find((p) => p.featured && p.screens?.length);
+const hero = featured?.screens?.[0];
+const watchable = products.filter((p) => p.repo);
+const [heroA, ...heroB] = t(locale, 'home.heroTitle').split('. ');
+
+// Soliton formula diagram, drawn at build time.
+const diagram = Array.from({ length: 141 }, (_, i) => {
+  const x = i * 4;
+  const s = 1 / Math.cosh((x - 280) / 38);
+  return `${i ? 'L' : 'M'}${x} ${(300 - s * s * 190).toFixed(1)}`;
+}).join('');
+const downloads = [
+  { href: '/brand/soliton-logo.png', label: 'PNG · 868 px' },
+  { href: '/brand/soliton-logo-512.png', label: 'PNG · 512 px' },
+  { href: '/brand/soliton-logo-256.png', label: 'PNG · 256 px' },
+];
 ---
 <Base title={t(locale, 'home.title')} description={t(locale, 'home.description')}>
-  <section class="mx-auto max-w-6xl px-4 py-24 sm:px-6 sm:py-32">
-    <h1 class="max-w-3xl text-4xl font-semibold tracking-tight sm:text-6xl">{t(locale, 'home.heroTitle')}</h1>
-    <p class="mt-6 max-w-2xl text-lg text-muted">{t(locale, 'home.heroLead')}</p>
-    <div class="mt-10 flex flex-wrap gap-3">
-      <a href={localePath(locale, '/products/')} class="rounded-md bg-accent px-5 py-2.5 font-medium text-accent-fg">{t(locale, 'home.ctaProducts')}</a>
-      <a href="https://github.com/solitonhq" rel="noopener" class="rounded-md border border-line px-5 py-2.5 font-medium hover:bg-surface">{t(locale, 'home.ctaGithub')}</a>
-    </div>
-  </section>
+  <script is:inline>document.documentElement.classList.add('js')</script>
 
-  <section class="border-t border-line" aria-labelledby="products">
-    <div class="mx-auto max-w-6xl px-4 py-20 sm:px-6">
-      <h2 id="products" class="text-2xl font-semibold tracking-tight">{t(locale, 'home.productsTitle')}</h2>
-      <p class="mt-2 text-muted">{t(locale, 'home.productsLead')}</p>
-      <div class="mt-8 grid gap-4 sm:grid-cols-2">
-        {products.map((p) => <ProductCard product={p} locale={locale} />)}
+  <div class="hero" id="top">
+    <canvas id="wave" aria-hidden="true"></canvas>
+    <div class="tk-wrap hero-in">
+      <div class="tk-eyebrow">{h.eyebrow}</div>
+      <h1>{heroA}. <span>{heroB.join('. ')}</span></h1>
+      <p class="lede">{h.lead}</p>
+      <div class="cta">
+        <a class="tk-btn primary" href="#tools">{h.ctaTools}</a>
+        <a class="tk-btn" href={site.githubOrg} rel="noopener">{h.ctaGithub}</a>
       </div>
-    </div>
-  </section>
 
-  <section class="border-t border-line" aria-labelledby="philosophy">
-    <div class="mx-auto max-w-6xl px-4 py-20 sm:px-6">
-      <h2 id="philosophy" class="text-2xl font-semibold tracking-tight">{t(locale, 'home.philosophyTitle')}</h2>
-      <p class="mt-2 max-w-2xl text-muted">{t(locale, 'home.philosophyLead')}</p>
-      <div class="mt-8 grid gap-8 sm:grid-cols-3">
-        {principles.map((n) => (
-          <div>
-            <h3 class="font-semibold">{t(locale, `home.principle${n}.title` as const)}</h3>
-            <p class="mt-2 text-sm text-muted">{t(locale, `home.principle${n}.body` as const)}</p>
-          </div>
+      <nav class="strip tk-rv" aria-label={h.toolsLabel}>
+        {products.map((p, i) => (
+          <a class="si" href={`#${p.slug}`}>
+            <div class="t"><span class="idx">{n(i + 1)}</span><span class:list={['tk-tag', p.status === 'incoming' ? 'soon' : 'live']}>{statusLabel[locale][p.status]}</span></div>
+            <div><b>Soliton <span>{p.short}</span></b><small>{p.copy[locale].tagline}</small></div>
+          </a>
         ))}
+      </nav>
+
+      {featured && hero && (
+        <div class="shot tk-rv">
+          <div class="lab"><span>{h.shotLabel} · {featured.name}</span><i></i><span>{statusLabel[locale][featured.status]}</span></div>
+          <div class="frame">
+            <Image src={hero.image} alt={hero.copy[locale].alt} widths={[640, 960, 1280, 1600, 2000]} sizes="(min-width: 1208px) 1110px, calc(100vw - 50px)" loading="eager" fetchpriority="high" />
+          </div>
+        </div>
+      )}
+    </div>
+  </div>
+
+  <div id="tools">
+    {products.map((p, i) => <ProductChapter product={p} locale={locale} index={i} />)}
+  </div>
+
+  <section id="approach" class="tk-section tk-alt">
+    <div class="tk-wrap phil">
+      <div class="tk-rv">
+        <div class="tk-eyebrow">{h.approach.eyebrow}</div>
+        <div class="tk-head" style="margin:16px 0 0">
+          <h2>{h.approach.title}</h2>
+          <p>{h.approach.lead}</p>
+        </div>
+        <div class="pillars">
+          {h.approach.pillars.map((x) => <div><b>{x.title}</b><span>{x.body}</span></div>)}
+        </div>
+      </div>
+      <svg class="tk-rv" viewBox="0 0 560 420" role="img" aria-label={h.approach.diagramAlt}>
+        <defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#5cc8ff" stop-opacity="0" /><stop offset=".5" stop-color="#5cc8ff" /><stop offset="1" stop-color="#5cc8ff" stop-opacity="0" /></linearGradient></defs>
+        <g stroke="#1a1d22" stroke-width="1"><path d="M0 70H560M0 140H560M0 210H560M0 280H560M0 350H560" /><path d="M70 0V420M140 0V420M210 0V420M280 0V420M350 0V420M420 0V420M490 0V420" /></g>
+        <path d={diagram} fill="none" stroke="url(#g)" stroke-width="2" />
+        <path d="M0 300H560" stroke="#272c33" stroke-dasharray="3 6" />
+        <text x="22" y="396" fill="#7b858f" font-family="ui-monospace,monospace" font-size="11" letter-spacing="2">u(x,t) = A · sech²(k(x − ct))</text>
+      </svg>
+    </div>
+  </section>
+
+  <section id="brand" class="tk-section">
+    <div class="tk-wrap">
+      <div class="tk-head tk-rv">
+        <div class="tk-eyebrow">{h.brand.eyebrow}</div>
+        <h2>{h.brand.title}</h2>
+        <p>{h.brand.lead}</p>
+      </div>
+      <div class="brandgrid tk-rv">
+        <div class="logobox"><img src="/brand/soliton-logo-256.png" alt={h.brand.logoAlt} width="168" height="168" loading="lazy" /></div>
+        <div>
+          <div class="bh">{h.brand.colour}</div>
+          <div class="sw">
+            <div><i style="background:#050506"></i><span><b>{h.brand.near}</b>#050506</span></div>
+            <div><i style="background:#fafafa"></i><span><b>{h.brand.white}</b>#FAFAFA</span></div>
+            <div><i style="background:#5cc8ff"></i><span><b>{h.brand.signal}</b>#5CC8FF · {h.brand.proposed}</span></div>
+          </div>
+          <div class="bh">{h.brand.downloads}</div>
+          <div class="dl">
+            {downloads.map((d) => <a href={d.href} download>{d.label}</a>)}
+            <a href={localePath(locale, '/brand/')}>{h.brand.full} →</a>
+          </div>
+          <div class="rules">
+            <div class="y"><h3>{h.brand.doTitle}</h3><ul>{h.brand.dos.map((x) => <li>{x}</li>)}</ul></div>
+            <div class="n"><h3>{h.brand.dontTitle}</h3><ul>{h.brand.donts.map((x) => <li>{x}</li>)}</ul></div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
-  <section class="border-t border-line" aria-labelledby="oss">
-    <div class="mx-auto max-w-6xl px-4 py-20 sm:px-6">
-      <h2 id="oss" class="text-2xl font-semibold tracking-tight">{t(locale, 'home.oss.title')}</h2>
-      <p class="mt-2 max-w-2xl text-muted">{t(locale, 'home.oss.body')}</p>
-      <a href="https://github.com/solitonhq" rel="noopener" class="mt-6 inline-block rounded-md border border-line px-5 py-2.5 font-medium hover:bg-surface">{t(locale, 'home.ctaGithub')}</a>
+  <section id="notify" class="tk-section tk-rule notify">
+    <div class="tk-wrap tk-rv">
+      <div class="tk-eyebrow c">{h.notify.eyebrow}</div>
+      <h2>{h.notify.title}</h2>
+      <p class="d">{h.notify.lead}</p>
+      <ol class="steps">
+        {h.notify.steps.map((s, i) => <li><span class="idx">{n(i + 1)}</span><b>{s.title}</b><span>{s.body}</span></li>)}
+      </ol>
+      <div class="nacts">
+        <a class="tk-btn primary" href={site.githubOrg} rel="noopener">{h.notify.follow}</a>
+        {watchable.map((p) => <a class="tk-btn" href={p.repo} rel="noopener">{h.notify.watch} {p.name}</a>)}
+      </div>
+      <p class="nnote">{h.notify.note}</p>
+    </div>
+  </section>
+
+  <section class="tk-rule oss">
+    <div class="tk-wrap tk-rv">
+      <div class="tk-eyebrow c">{h.oss.eyebrow}</div>
+      <h2>{h.oss.title}</h2>
+      <p>{h.oss.body}</p>
+      <a class="tk-btn" href={site.githubOrg} rel="noopener">github.com/solitonhq</a>
     </div>
   </section>
 </Base>
+
+<style>
+  /* hero */
+  .hero { position: relative; padding: 90px 0 0; overflow: hidden; }
+  #wave { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+  .hero::after { content: ''; position: absolute; inset: auto 0 0 0; height: 220px; background: linear-gradient(transparent, var(--bg)); pointer-events: none; z-index: 1; }
+  .hero-in { position: relative; z-index: 2; }
+  .hero h1 { font-size: clamp(40px, 7.2vw, 92px); line-height: 1.02; letter-spacing: -.035em; font-weight: 600; margin: 22px 0 26px; max-width: 16ch; }
+  .hero h1 span { color: var(--muted); }
+  .lede { font-size: clamp(17px, 1.7vw, 21px); color: var(--muted); max-width: 58ch; }
+  .cta { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 36px; }
+
+  .strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(210px, 100%), 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line-2); margin-top: 56px; position: relative; z-index: 3; }
+  .si { background: rgba(9, 10, 12, .92); padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 14px; position: relative; transition: background .2s; }
+  .si:hover { background: #12141a; }
+  .si::before { content: ''; position: absolute; left: 0; top: 0; width: 0; height: 2px; background: var(--accent); transition: width .35s; }
+  .si:hover::before { width: 100%; }
+  .si .t { display: flex; justify-content: space-between; align-items: center; }
+  .si .idx { font-family: var(--font-mono); font-size: 11px; letter-spacing: .14em; color: var(--dim); }
+  .si b { display: block; font-size: 19px; letter-spacing: -.02em; font-weight: 600; line-height: 1.2; }
+  .si b span { color: var(--muted); font-weight: 400; }
+  .si small { color: var(--muted); font-size: 13px; display: block; margin-top: 4px; }
+
+  .shot { position: relative; margin-top: 56px; z-index: 2; margin-bottom: -100px; }
+  .shot .lab { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; font-family: var(--font-mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--dim); }
+  .shot .lab i { flex: 1; height: 1px; background: var(--line); }
+  .frame { border: 1px solid var(--line-2); background: var(--surface); box-shadow: 0 60px 120px -30px rgba(0, 0, 0, .9), 0 0 120px -40px color-mix(in srgb, var(--accent) 35%, transparent); -webkit-mask-image: linear-gradient(#000 35%, transparent 78%); mask-image: linear-gradient(#000 35%, transparent 78%); }
+  .frame :global(img) { width: 100%; height: auto; display: block; }
+  #tools > :global(section:first-child) { padding-top: 120px; }
+
+  /* approach */
+  .phil { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+  .phil svg { width: 100%; height: auto; border: 1px solid var(--line); background: var(--bg-2); }
+  .pillars { display: grid; gap: 26px; margin-top: 34px; }
+  .pillars div { padding-left: 22px; border-left: 1px solid var(--line-2); }
+  .pillars b { display: block; margin-bottom: 4px; }
+  .pillars span { color: var(--muted); font-size: 15px; }
+  @media (max-width: 860px) { .phil { grid-template-columns: 1fr; gap: 40px; } }
+
+  /* brand */
+  .brandgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--line); border: 1px solid var(--line); }
+  .brandgrid > div { background: var(--bg-2); padding: 36px; }
+  .brandgrid > .logobox { display: flex; align-items: center; justify-content: center; min-height: 260px; background: radial-gradient(circle at 50% 40%, #111419, var(--bg) 70%); }
+  .logobox img { width: 168px; height: 168px; }
+  .bh { font-family: var(--font-mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--dim); margin-bottom: 6px; }
+  .sw { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 18px 0 26px; }
+  .sw div { border: 1px solid var(--line-2); }
+  .sw i { display: block; height: 64px; }
+  .sw span { display: block; padding: 8px 10px; font-family: var(--font-mono); font-size: 11px; color: var(--muted); line-height: 1.5; }
+  .sw span b { display: block; color: var(--fg); font-weight: 500; }
+  .dl { display: flex; gap: 10px; flex-wrap: wrap; margin: 12px 0 26px; }
+  .dl a { font-family: var(--font-mono); font-size: 12px; letter-spacing: .04em; border: 1px solid var(--line-2); padding: 8px 12px; color: var(--muted); transition: .15s; }
+  .dl a:hover { color: var(--accent); border-color: var(--accent); }
+  .rules { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; font-size: 14px; color: var(--muted); }
+  .rules h3 { font-family: var(--font-mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; margin-bottom: 10px; font-weight: 500; }
+  .rules .y h3 { color: var(--accent); }
+  .rules .n h3 { color: #e8897a; }
+  .rules li { list-style: none; padding: 5px 0; border-top: 1px solid var(--line); }
+  @media (max-width: 860px) { .brandgrid { grid-template-columns: 1fr; } .brandgrid > div { padding: 26px 20px; } .rules { grid-template-columns: 1fr; } }
+
+  /* notify */
+  .notify { text-align: center; background: radial-gradient(ellipse at 50% 0%, color-mix(in srgb, var(--accent) 9%, transparent), transparent 60%); }
+  .notify h2 { font-size: clamp(28px, 4vw, 52px); letter-spacing: -.03em; font-weight: 600; margin: 16px 0 14px; line-height: 1.08; }
+  .notify .d { color: var(--muted); max-width: 54ch; margin: 0 auto 40px; font-size: 18px; }
+  .c { justify-content: center; }
+  .c::before { display: none; }
+  .steps { list-style: none; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); max-width: 860px; margin: 0 auto 36px; text-align: left; }
+  .steps li { background: var(--surface); padding: 22px 24px; display: flex; flex-direction: column; gap: 4px; }
+  .steps .idx { font-family: var(--font-mono); font-size: 11px; letter-spacing: .14em; color: var(--accent); margin-bottom: 18px; }
+  .steps b { font-weight: 600; }
+  .steps li > span:last-child { color: var(--muted); font-size: 14px; }
+  .nacts { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+  .nnote { color: var(--dim); font-size: 13px; margin-top: 22px; font-family: var(--font-mono); letter-spacing: .02em; }
+  @media (max-width: 760px) { .steps { grid-template-columns: 1fr; } }
+
+  .oss { text-align: center; padding: 100px 0; }
+  .oss h2 { font-size: clamp(26px, 3.4vw, 40px); letter-spacing: -.03em; font-weight: 600; margin: 16px 0 14px; }
+  .oss p { color: var(--muted); max-width: 52ch; margin: 0 auto 28px; font-size: 17px; }
+</style>
+
+<script>
+  // Reveal sections as they scroll into view. Anything already on screen opens immediately.
+  const els = [...document.querySelectorAll('.tk-rv')];
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const open = (el: Element) => el.classList.add('in');
+  if (reduce || !('IntersectionObserver' in window)) {
+    els.forEach(open);
+  } else {
+    const io = new IntersectionObserver(
+      (entries) => entries.forEach((e) => { if (e.isIntersecting) { open(e.target); io.unobserve(e.target); } }),
+      { threshold: 0.1 },
+    );
+    els.forEach((el) => (el.getBoundingClientRect().top < innerHeight * 0.95 ? open(el) : io.observe(el)));
+  }
+
+  // Hero: a single soliton pulse travelling along a quiet baseline.
+  const canvas = document.getElementById('wave') as HTMLCanvasElement | null;
+  const ctx = canvas?.getContext('2d');
+  if (canvas && ctx) {
+    let W = 0, H = 0;
+    const size = () => {
+      const dpr = Math.min(devicePixelRatio || 1, 2);
+      W = canvas.clientWidth; H = canvas.clientHeight;
+      canvas.width = W * dpr; canvas.height = H * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    };
+    size();
+    addEventListener('resize', size);
+    const sech = (x: number) => 1 / Math.cosh(x);
+    const draw = (t: number) => {
+      ctx.clearRect(0, 0, W, H);
+      ctx.strokeStyle = 'rgba(92,200,255,.045)'; ctx.lineWidth = 1;
+      for (let gx = 0; gx < W; gx += 80) { ctx.beginPath(); ctx.moveTo(gx + .5, 0); ctx.lineTo(gx + .5, H); ctx.stroke(); }
+      const base = H * .33, amp = Math.min(150, H * .2), span = W + 400;
+      const pos = ((t * 0.00007) % 1) * span - 200;
+      const width = W * .055;
+      for (let l = 0; l < 4; l++) {
+        const off = l * 14, a = amp * (1 - l * .2), al = l === 0 ? 1 : .16 / l, shift = pos - l * 18;
+        // quiet baseline
+        ctx.beginPath();
+        for (let x = 0; x <= W; x += 3) { const s = sech((x - shift) / width); const y = base + off - s * s * a; x ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }
+        const g = ctx.createLinearGradient(0, 0, W, 0);
+        g.addColorStop(0, 'rgba(92,200,255,0)'); g.addColorStop(.5, `rgba(92,200,255,${al * .28})`); g.addColorStop(1, 'rgba(92,200,255,0)');
+        ctx.strokeStyle = g; ctx.lineWidth = l === 0 ? 1.6 : 1; ctx.stroke();
+        // the pulse itself stays bright
+        const r = width * 2.6, from = Math.max(0, shift - r), to = Math.min(W, shift + r);
+        ctx.beginPath();
+        for (let x = from; x <= to; x += 3) { const s = sech((x - shift) / width); const y = base + off - s * s * a; x === from ? ctx.moveTo(x, y) : ctx.lineTo(x, y); }
+        const g2 = ctx.createLinearGradient(shift - r, 0, shift + r, 0);
+        g2.addColorStop(0, 'rgba(92,200,255,0)'); g2.addColorStop(.5, `rgba(92,200,255,${al})`); g2.addColorStop(1, 'rgba(92,200,255,0)');
+        ctx.strokeStyle = g2; ctx.stroke();
+      }
+      if (!reduce) requestAnimationFrame(draw);
+    };
+    requestAnimationFrame((t) => draw(reduce ? 9000 : t));
+  }
+</script>

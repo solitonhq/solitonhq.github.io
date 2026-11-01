@@ -1,42 +1,37 @@
 @import 'tailwindcss';
+@import './toolkit.css';
 
-/* Brand: monochrome, taken from the Soliton mark (white on near-black). */
+/* Brand: near-black and white from the Soliton mark, plus one cool "signal" accent. Dark only. */
 :root {
-  --bg: #fafafa;
-  --surface: #ffffff;
-  --fg: #0a0a0b;
-  --muted: #5b5b63;
-  --line: #e4e4e7;
-  --accent: #0a0a0b;
-  --accent-fg: #fafafa;
-  color-scheme: light;
-}
-:root:not([data-theme='light']) {
-  @media (prefers-color-scheme: dark) {
-    --bg: #050506;
-    --surface: #0d0d0f;
-    --fg: #f4f4f5;
-    --muted: #a1a1aa;
-    --line: #232327;
-    --accent: #fafafa;
-    --accent-fg: #0a0a0b;
-    color-scheme: dark;
-  }
+  --bg: #050506;
+  --bg-2: #09090b;
+  --surface: #0d0e11;
+  --fg: #fafafa;
+  --muted: #8c95a0;
+  --dim: #7b858f;
+  --line: #1a1d22;
+  --line-2: #272c33;
+  --accent: #5cc8ff;
+  --accent-fg: #031018;
+  color-scheme: dark;
 }
 
 @theme inline {
   --color-bg: var(--bg);
+  --color-bg-2: var(--bg-2);
   --color-surface: var(--surface);
   --color-fg: var(--fg);
   --color-muted: var(--muted);
+  --color-dim: var(--dim);
   --color-line: var(--line);
+  --color-line-2: var(--line-2);
   --color-accent: var(--accent);
   --color-accent-fg: var(--accent-fg);
   --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 
-html { background: var(--bg); color: var(--fg); font-family: var(--font-sans); scroll-behavior: smooth; }
-body { min-height: 100dvh; -webkit-font-smoothing: antialiased; }
-:focus-visible { outline: 2px solid var(--fg); outline-offset: 3px; border-radius: 4px; }
+html { background: var(--bg); color: var(--fg); font-family: var(--font-sans); scroll-behavior: smooth; scroll-padding-top: 72px; }
+body { min-height: 100dvh; -webkit-font-smoothing: antialiased; overflow-x: clip; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { animation: none !important; transition: none !important; } }

@@ -1,20 +1,55 @@
 ---
 import Logo from './Logo.astro';
-import { localePath, switchLocalePath, t, type Locale } from '../i18n/ui';
+import { localePath, switchLocalePath, t, type Locale, type UIKey } from '../i18n/ui';
+import { site } from '../site';
 interface Props { locale: Locale; }
 const { locale } = Astro.props;
 const other: Locale = locale === 'en' ? 'tr' : 'en';
+const home = localePath(locale);
+const items: { href: string; key: UIKey; external?: boolean }[] = [
+  { href: `${home}#tools`, key: 'nav.tools' },
+  { href: `${home}#approach`, key: 'nav.approach' },
+  { href: `${home}#brand`, key: 'nav.brand' },
+  { href: localePath(locale, '/about/'), key: 'nav.about' },
+  { href: localePath(locale, '/contact/'), key: 'nav.contact' },
+  { href: site.githubOrg, key: 'nav.github', external: true },
+];
+const notify = `${home}#notify`;
+const langHref = switchLocalePath(Astro.url.pathname, other);
 ---
-<header class="border-b border-line">
-  <div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
-    <a href={localePath(locale)} class="flex items-center gap-3 font-semibold tracking-tight">
+<header class="sticky top-0 z-50 border-b border-line bg-bg/80 backdrop-blur-md">
+  <div class="mx-auto flex h-[60px] max-w-[1160px] items-center justify-between gap-4 px-6">
+    <a href={home} class="flex items-center gap-3 text-[13px] font-semibold uppercase tracking-[.32em]">
       <Logo size={28} />
       <span>Soliton</span>
     </a>
-    <nav aria-label="Primary" class="flex items-center gap-5 text-sm text-muted">
-      <a class="hover:text-fg" href={localePath(locale, '/products/')}>{t(locale, 'nav.products')}</a>
-      <a class="hover:text-fg" href="https://github.com/solitonhq" rel="noopener">{t(locale, 'nav.github')}</a>
-      <a class="rounded-md border border-line px-2.5 py-1 text-fg hover:bg-surface" href={switchLocalePath(Astro.url.pathname, other)} hreflang={other} lang={other}>{t(locale, 'lang.switch')}</a>
+
+    <nav aria-label="Primary" class="hidden items-center gap-6 text-sm text-muted md:flex">
+      {items.map((i) => <a class="hover:text-fg" href={i.href} rel={i.external ? 'noopener' : undefined}>{t(locale, i.key)}</a>)}
+      <a class="rounded-sm border border-line-2 px-2.5 py-1 text-fg hover:border-fg" href={langHref} hreflang={other} lang={other}>{t(locale, 'lang.switch')}</a>
+      <a class="tk-btn primary sm" href={notify}>{t(locale, 'nav.notify')}</a>
     </nav>
+
+    <div class="flex items-center gap-3 md:hidden">
+      <a class="rounded-sm border border-line-2 px-2.5 py-1 text-sm text-fg" href={langHref} hreflang={other} lang={other}>{t(locale, 'lang.switch')}</a>
+      <details class="menu relative">
+        <summary class="cursor-pointer list-none rounded-sm border border-line-2 px-3 py-1 text-sm">{t(locale, 'nav.menu')}</summary>
+        <nav aria-label={t(locale, 'nav.menu')} class="absolute right-0 top-full mt-3 flex w-56 flex-col border border-line-2 bg-surface p-2 text-sm shadow-2xl">
+          {items.map((i) => <a class="px-3 py-2.5 text-muted hover:text-fg" href={i.href} rel={i.external ? 'noopener' : undefined}>{t(locale, i.key)}</a>)}
+          <a class="tk-btn primary sm mt-2 justify-center" href={notify}>{t(locale, 'nav.notify')}</a>
+        </nav>
+      </details>
+    </div>
   </div>
 </header>
+
+<style>
+  .menu summary::-webkit-details-marker { display: none; }
+</style>
+
+<script>
+  // Close the mobile menu after picking an in-page link.
+  document.querySelectorAll<HTMLDetailsElement>('details.menu').forEach((d) => {
+    d.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => (d.open = false)));
+  });
+</script>

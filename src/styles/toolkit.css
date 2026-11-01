@@ -1,0 +1,27 @@
+/* Shared building blocks of the home page. Prefixed so they never collide with Tailwind utilities. */
+.tk-wrap { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
+
+.tk-eyebrow { font-family: var(--font-mono); font-size: 12px; letter-spacing: .18em; text-transform: uppercase; color: var(--accent); display: flex; align-items: center; gap: 10px; }
+.tk-eyebrow::before { content: ''; width: 24px; height: 1px; background: var(--accent); }
+
+.tk-tag { font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; padding: 3px 8px; border: 1px solid var(--line-2); color: var(--muted); white-space: nowrap; }
+.tk-tag.live { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 45%, transparent); background: color-mix(in srgb, var(--accent) 8%, transparent); }
+.tk-tag.soon::before { content: ''; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); margin-right: 8px; vertical-align: 1px; animation: tk-blip 2.2s ease-in-out infinite; }
+@keyframes tk-blip { 0%, 100% { opacity: .25 } 50% { opacity: 1 } }
+
+.tk-btn { display: inline-flex; align-items: center; gap: 10px; padding: 12px 20px; font-size: 14px; font-weight: 500; border: 1px solid var(--line-2); color: var(--fg); transition: .18s; background: transparent; cursor: pointer; }
+.tk-btn:hover { border-color: var(--fg); }
+.tk-btn.primary { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); font-weight: 600; }
+.tk-btn.primary:hover { background: #8bdaff; border-color: #8bdaff; box-shadow: 0 0 32px -4px color-mix(in srgb, var(--accent) 60%, transparent); }
+.tk-btn.sm { padding: 8px 14px; font-size: 13px; }
+
+.tk-section { position: relative; padding: 130px 0; }
+.tk-rule { border-top: 1px solid var(--line); }
+.tk-alt { background: var(--bg-2); border-block: 1px solid var(--line); }
+.tk-head { max-width: 720px; margin-bottom: 56px; }
+.tk-head h2 { font-size: clamp(30px, 4.2vw, 52px); line-height: 1.08; letter-spacing: -.03em; font-weight: 600; margin: 16px 0 18px; }
+.tk-head p { color: var(--muted); font-size: 18px; }
+
+/* scroll reveal: only hidden when JS is present to reveal it again */
+.js .tk-rv { opacity: 0; transform: translateY(18px); }
+.js .tk-rv.in { opacity: 1; transform: none; transition: opacity .7s ease, transform .7s ease; }
