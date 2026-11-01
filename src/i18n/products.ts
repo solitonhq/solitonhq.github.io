@@ -97,7 +97,7 @@ export const products: Product[] = [
     short: 'Term',
     status: 'released',
     repo: site.termRepo,
-    seo: { os: 'macOS 12 or later', license: 'https://www.apache.org/licenses/LICENSE-2.0', version: site.termVersion, downloadUrl: site.termReleases },
+    seo: { os: 'macOS 13 or later', license: 'https://www.apache.org/licenses/LICENSE-2.0', version: site.termVersion, downloadUrl: site.termReleases },
     actions: [
       { label: { en: 'Download for macOS', tr: 'macOS için indir' }, href: site.termReleases, primary: true, external: true },
       { label: { en: 'Roadmap', tr: 'Yol haritası' }, href: site.termRoadmap, external: true },
@@ -127,7 +127,7 @@ export const products: Product[] = [
         ],
         meta: [
           { k: 'version', v: site.termVersion, accent: true },
-          { k: 'macos', v: 'apple silicon & intel · 12+' },
+          { k: 'macos', v: 'apple silicon · macos 13+' },
           { k: 'built on', v: 'tauri · rust · openssh' },
           { k: 'signing', v: 'self-signed · not notarized' },
           { k: 'verify', v: 'sha-256 · sbom · attestation' },
@@ -142,7 +142,7 @@ export const products: Product[] = [
             { situation: 'Someone else’s server, your habits', answer: 'Session-only aliases are injected in memory, so nothing lands in the remote shell profile or history.' },
           ],
           requirementsTitle: 'Requirements',
-          requirements: ['macOS 12 or later (Apple silicon and Intel)', 'Uses your system’s own OpenSSH'],
+          requirements: ['macOS 13 or later on Apple silicon (there is no Intel build)', 'Uses your system’s own OpenSSH'],
           firstLaunch: {
             title: 'First launch',
             steps: [
@@ -192,7 +192,7 @@ export const products: Product[] = [
         ],
         meta: [
           { k: 'sürüm', v: site.termVersion, accent: true },
-          { k: 'macos', v: 'apple silicon ve intel · 12+' },
+          { k: 'macos', v: 'apple silicon · macos 13+' },
           { k: 'altyapı', v: 'tauri · rust · openssh' },
           { k: 'imza', v: 'kendinden imzalı · notarize değil' },
           { k: 'doğrula', v: 'sha-256 · sbom · attestation' },
@@ -207,7 +207,7 @@ export const products: Product[] = [
             { situation: 'Başkasının sunucusu, sizin alışkanlıklarınız', answer: 'Oturuma özel alias’lar bellekte enjekte edilir; uzak kabuk profiline ya da geçmişe hiçbir şey yazılmaz.' },
           ],
           requirementsTitle: 'Gereksinimler',
-          requirements: ['macOS 12 veya üstü (Apple silicon ve Intel)', 'Sistemin kendi OpenSSH’ını kullanır'],
+          requirements: ['Apple silicon üzerinde macOS 13 veya üstü (Intel sürümü yok)', 'Sistemin kendi OpenSSH’ını kullanır'],
           firstLaunch: {
             title: 'İlk açılış',
             steps: [

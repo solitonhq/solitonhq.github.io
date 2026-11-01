@@ -28,7 +28,7 @@ export const faq: Record<Locale, FaqCopy> = {
       },
       {
         q: 'Which platforms are supported?',
-        a: 'Both tools run on macOS 12 or later, on Apple silicon and Intel. There are no Linux or Windows builds yet; Linux is planned for Soliton Rudder.',
+        a: 'Soliton Rudder runs on macOS 12 or later, on Apple silicon and Intel. Soliton Term runs on macOS 13 or later on Apple silicon only; there is no Intel build yet. There are no Linux or Windows builds yet; Linux is planned for Soliton Rudder.',
       },
       {
         q: 'Are the tools free and open source?',
@@ -64,7 +64,7 @@ export const faq: Record<Locale, FaqCopy> = {
       },
       {
         q: 'Hangi platformlar destekleniyor?',
-        a: 'İki araç da macOS 12 veya üstünde, Apple silicon ve Intel’de çalışır. Henüz Linux ya da Windows sürümü yok; Linux, Soliton Rudder için planlanıyor.',
+        a: 'Soliton Rudder, macOS 12 veya üstünde, Apple silicon ve Intel’de çalışır. Soliton Term yalnızca Apple silicon üzerinde macOS 13 veya üstünde çalışır; henüz Intel sürümü yok. Henüz Linux ya da Windows sürümü yok; Linux, Soliton Rudder için planlanıyor.',
       },
       {
         q: 'Araçlar ücretsiz ve açık kaynak mı?',
