@@ -1,6 +1,15 @@
 import type { Locale } from './ui';
 
-export type ShotKey = 'overview' | 'assessments' | 'topology' | 'applications' | 'ingress-map' | 'pods';
+export type ShotKey =
+  | 'overview'
+  | 'events'
+  | 'assessments'
+  | 'environment'
+  | 'topology'
+  | 'ingress-detail'
+  | 'applications'
+  | 'ingress-map'
+  | 'pods';
 
 export interface RudderCopy {
   title: string;
@@ -32,7 +41,17 @@ export interface RudderCopy {
   back: string;
 }
 
-export const shotOrder: ShotKey[] = ['overview', 'assessments', 'topology', 'applications', 'ingress-map', 'pods'];
+export const shotOrder: ShotKey[] = [
+  'overview',
+  'events',
+  'assessments',
+  'environment',
+  'topology',
+  'ingress-detail',
+  'applications',
+  'ingress-map',
+  'pods',
+];
 
 export const rudder: Record<Locale, RudderCopy> = {
   en: {
@@ -46,6 +65,9 @@ export const rudder: Record<Locale, RudderCopy> = {
     shotsLead: 'Everything below is a real Soliton Rudder window connected to a local demo cluster.',
     shots: {
       overview: { title: 'Cluster overview', alt: 'Soliton Rudder cluster overview showing node, pod and workload health, capacity and items that need attention', body: 'The first page of every cluster: health, capacity, what needs attention with runbooks, and recent warnings.' },
+      events: { title: 'Events that follow ownership', alt: 'Events tab of a failing Deployment listing warnings and events from the pods it owns, with a warning filter', body: 'A Deployment’s events include those of the ReplicaSets and pods it owns, with an All / Warnings filter, so a failing rollout is visible from the top.' },
+      environment: { title: 'Environment & mounts', alt: 'Pod overview listing environment variables, Secret and ConfigMap references with a Show button, mounts and volumes', body: 'See what a pod reads and where each value comes from. Secret and ConfigMap values load only when you press Show, and hide again after 30 seconds.' },
+      'ingress-detail': { title: 'Ingress details', alt: 'Ingress detail with its URL, backends, Service and pod IPs and addresses', body: 'URLs you can open, backends with Service and pod IPs, and the assigned addresses at a glance.' },
       assessments: { title: 'Assessments', alt: 'Cluster assessment with a score, category breakdown and findings with fix guidance', body: 'Read-only checks across resources, reliability, security and maintenance, with a score, fix guidance and history.' },
       topology: { title: 'Topology', alt: 'Topology graph from ingress to services, workloads and pods with failing workloads highlighted', body: 'A live Ingress → Service → Workload → Pod → Node graph with health colours and a problems-only mode.' },
       applications: { title: 'Applications', alt: 'Applications view grouping workloads by label and Helm release with health and version', body: 'Applications found from Helm releases and labels, with health, versions, URLs and history.' },
@@ -54,7 +76,8 @@ export const rudder: Record<Locale, RudderCopy> = {
     },
     featuresTitle: 'What it does',
     features: [
-      { title: 'Troubleshoot faster', body: 'Plain-language health for pods, workloads and nodes, step-by-step runbooks, multi-pod logs, pod shells and debug containers.' },
+      { title: 'Troubleshoot faster', body: 'Plain-language health for pods, workloads and nodes, events that follow ownership (a Deployment shows its pods’ events), step-by-step runbooks, multi-pod logs, pod shells and debug containers.' },
+      { title: 'See what a pod reads', body: 'Environment variables and where they come from, Secret and ConfigMap references, volumes and mounts. Secret values stay hidden until you press Show for one key.' },
       { title: 'Know the health of your cluster', body: 'Assessments run 30+ read-only checks, score the cluster, explain how to fix findings and track the trend over time.' },
       { title: 'Feasibility and what-if', body: 'A read-only simulator answers “can A reach B?” against your NetworkPolicies and “what happens if I drain this node?”.' },
       { title: 'Cost analysis', body: 'Compare requests with real usage to spot waste and estimate potential savings per workload.' },
@@ -62,6 +85,7 @@ export const rudder: Record<Locale, RudderCopy> = {
       { title: 'Blackbox recorder', body: 'An opt-in flight recorder with a time slider to see what was failing at the moment something broke.' },
       { title: 'Self-healing port forwarding', body: 'One-click forwarding that rebinds to a healthy replica when pods restart or roll out.' },
       { title: 'GitOps and monitoring', body: 'Argo CD, Flux, Helm and Prometheus views built in, plus plugins for your own panels and checks.' },
+      { title: 'Quick everyday actions', body: 'Scale and restart straight from the table, resize columns, search the YAML with ⌘F, and keep a separate terminal per cluster.' },
     ],
     principlesTitle: 'Built to be trusted',
     principles: [
@@ -99,6 +123,9 @@ export const rudder: Record<Locale, RudderCopy> = {
     shotsLead: 'Aşağıdakilerin hepsi, yerel bir demo cluster’a bağlı gerçek Soliton Rudder pencereleridir.',
     shots: {
       overview: { title: 'Cluster genel bakışı', alt: 'Node, pod ve iş yükü sağlığını, kapasiteyi ve ilgi bekleyen öğeleri gösteren Soliton Rudder cluster genel bakışı', body: 'Her cluster’ın ilk sayfası: sağlık, kapasite, runbook’larla birlikte ilgi bekleyenler ve son uyarılar.' },
+      events: { title: 'Sahipliği izleyen olaylar', alt: 'Hatalı bir Deployment’ın Events sekmesi: uyarılar ve sahip olduğu pod’ların olayları, uyarı süzgeciyle', body: 'Bir Deployment’ın olayları, sahip olduğu ReplicaSet ve pod’ların olaylarını da içerir; All / Warnings süzgeciyle hatalı bir güncelleme en üstten görünür.' },
+      environment: { title: 'Ortam ve mount’lar', alt: 'Ortam değişkenlerini, Show düğmeli Secret ve ConfigMap referanslarını, mount’ları ve volume’leri listeleyen pod özeti', body: 'Bir pod’un neyi okuduğunu ve her değerin nereden geldiğini görün. Secret ve ConfigMap değerleri yalnızca Show’a bastığınızda yüklenir ve 30 saniye sonra yeniden gizlenir.' },
+      'ingress-detail': { title: 'Ingress ayrıntıları', alt: 'URL’si, backend’leri, Service ve pod IP’leri ve adresleriyle ingress ayrıntısı', body: 'Açabileceğiniz URL’ler, Service ve pod IP’leriyle backend’ler ve atanan adresler tek bakışta.' },
       assessments: { title: 'Değerlendirmeler', alt: 'Puan, kategori dağılımı ve çözüm önerili bulgular içeren cluster değerlendirmesi', body: 'Kaynak, güvenilirlik, güvenlik ve bakım alanlarında salt okunur kontroller; puan, çözüm önerileri ve geçmişle birlikte.' },
       topology: { title: 'Topoloji', alt: 'Ingress’ten servislere, iş yüklerine ve pod’lara uzanan, hatalı iş yüklerinin vurgulandığı topoloji grafiği', body: 'Sağlık renkleriyle canlı Ingress → Service → Workload → Pod → Node grafiği ve yalnızca sorunları gösteren mod.' },
       applications: { title: 'Uygulamalar', alt: 'İş yüklerini label ve Helm release’e göre gruplayan, sağlık ve sürüm gösteren uygulamalar görünümü', body: 'Helm release’lerinden ve label’lardan bulunan uygulamalar; sağlık, sürüm, URL ve geçmişle birlikte.' },
@@ -107,7 +134,8 @@ export const rudder: Record<Locale, RudderCopy> = {
     },
     featuresTitle: 'Neler yapar',
     features: [
-      { title: 'Daha hızlı sorun giderme', body: 'Pod, iş yükü ve node’lar için sade dille sağlık özeti, adım adım runbook’lar, çoklu pod logları, pod shell’leri ve debug container’lar.' },
+      { title: 'Daha hızlı sorun giderme', body: 'Pod, iş yükü ve node’lar için sade dille sağlık özeti, sahipliği izleyen olaylar (bir Deployment, pod’larının olaylarını da gösterir), adım adım runbook’lar, çoklu pod logları, pod shell’leri ve debug container’lar.' },
+      { title: 'Bir pod’un neyi okuduğunu görün', body: 'Ortam değişkenleri ve nereden geldikleri, Secret ve ConfigMap referansları, volume’ler ve mount’lar. Secret değerleri, tek bir anahtar için Show’a basana kadar gizli kalır.' },
       { title: 'Cluster sağlığını bilin', body: 'Değerlendirmeler 30’dan fazla salt okunur kontrol çalıştırır, cluster’ı puanlar, bulguların nasıl düzeltileceğini anlatır ve trendi zaman içinde izler.' },
       { title: 'Uygunluk ve “ya olursa”', body: 'Salt okunur simülatör, NetworkPolicy’lerinize göre “A, B’ye ulaşabilir mi?” ve “bu node’u drain edersem ne olur?” sorularını yanıtlar.' },
       { title: 'Maliyet analizi', body: 'İstekleri gerçek kullanımla karşılaştırarak israfı bulun ve iş yükü başına olası tasarrufu tahmin edin.' },
@@ -115,6 +143,7 @@ export const rudder: Record<Locale, RudderCopy> = {
       { title: 'Blackbox kaydedici', body: 'İsteğe bağlı bir uçuş kaydedicisi: bir şey bozulduğu anda nelerin hata verdiğini zaman çubuğuyla görün.' },
       { title: 'Kendini onaran port forward', body: 'Pod’lar yeniden başladığında ya da güncellendiğinde sağlıklı bir replica’ya yeniden bağlanan tek tıkla yönlendirme.' },
       { title: 'GitOps ve izleme', body: 'Argo CD, Flux, Helm ve Prometheus görünümleri dahili; ayrıca kendi panel ve kontrollerinizi ekleyen eklentiler.' },
+      { title: 'Hızlı günlük işlemler', body: 'Scale ve Restart doğrudan tablodan, sütun genişliği ayarı, YAML’da ⌘F ile arama ve her cluster için ayrı terminal.' },
     ],
     principlesTitle: 'Güvenilmek için tasarlandı',
     principles: [
