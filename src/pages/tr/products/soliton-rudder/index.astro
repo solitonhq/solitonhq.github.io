@@ -1,4 +1,12 @@
 ---
-import RudderPage from '../../../../components/RudderPage.astro';
+import ProductPage from '../../../../components/ProductPage.astro';
+import RudderExtras from '../../../../components/RudderExtras.astro';
+import { products } from '../../../../i18n/products';
+import { rudder } from '../../../../i18n/rudder';
+
+const product = products.find((p) => p.slug === 'rudder')!;
+const c = rudder.tr;
 ---
-<RudderPage locale="tr" />
+<ProductPage locale="tr" product={product} description={c.description} features={c.features}>
+  <RudderExtras locale="tr" />
+</ProductPage>

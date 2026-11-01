@@ -1,0 +1,48 @@
+---
+import { rudder } from '../i18n/rudder';
+import type { Locale } from '../i18n/ui';
+import { site } from '../site';
+interface Props { locale: Locale; }
+const { locale } = Astro.props;
+const c = rudder[locale];
+const n = (i: number) => String(i).padStart(2, '0');
+---
+<section class="tk-section tk-rule tk-alt">
+  <div class="tk-wrap cols">
+    <div>
+      <div class="tk-eyebrow">{c.requirementsTitle}</div>
+      <ul class="plain">
+        {c.requirements.map((r) => <li>{r}</li>)}
+      </ul>
+      <p class="note">{c.verifyNote}</p>
+      <p class="links">
+        <a href={site.rudderInstallGuide} rel="noopener">{c.installGuide} →</a>
+        <a href={site.rudderReleases} rel="noopener">{c.allReleases} →</a>
+      </p>
+    </div>
+    <div>
+      <div class="tk-eyebrow">{c.roadmapTitle}</div>
+      <p class="lead">{c.roadmapLead}</p>
+      <ol class="road">
+        {c.roadmap.map((r, i) => <li><span>{n(i + 1)}</span>{r}</li>)}
+      </ol>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; }
+  .plain { list-style: none; margin-top: 22px; }
+  .plain li { padding: 12px 0; border-top: 1px solid var(--line); color: var(--fg); }
+  .plain li:last-child { border-bottom: 1px solid var(--line); }
+  .note { margin-top: 22px; color: var(--muted); font-size: 15px; }
+  .links { margin-top: 18px; display: flex; gap: 22px; flex-wrap: wrap; font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; }
+  .links a { color: var(--muted); }
+  .links a:hover { color: var(--accent); }
+  .lead { margin-top: 22px; color: var(--muted); }
+  .road { list-style: none; margin-top: 16px; }
+  .road li { display: grid; grid-template-columns: 40px 1fr; padding: 12px 0; border-top: 1px solid var(--line); }
+  .road li:last-child { border-bottom: 1px solid var(--line); }
+  .road span { font-family: var(--font-mono); font-size: 11px; letter-spacing: .14em; color: var(--accent); padding-top: 3px; }
+  @media (max-width: 860px) { .cols { grid-template-columns: 1fr; gap: 48px; } }
+</style>

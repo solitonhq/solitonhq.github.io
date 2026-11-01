@@ -32,7 +32,8 @@ export interface HomeCopy {
     watch: string;
     note: string;
   };
-  oss: { eyebrow: string; title: string; body: string };
+  incoming: { eyebrow: string; title: string; lead: string };
+  oss: { body: string };
   product: { back: string; moreTools: string; viewDetails: string; allProducts: string };
 }
 
@@ -83,11 +84,12 @@ export const home: Record<Locale, HomeCopy> = {
       watch: 'Watch',
       note: 'New tools get their own repository when they launch. Follow the organisation to see them appear.',
     },
-    oss: {
-      eyebrow: 'Built in the open',
-      title: 'Read it. Run it. Fix it.',
-      body: 'Soliton is developed publicly. Issues and pull requests are welcome.',
+    incoming: {
+      eyebrow: 'Incoming',
+      title: 'More tools are on the way.',
+      lead: 'Each does one job. Follow Soliton on GitHub to hear when one lands.',
     },
+    oss: { body: 'Soliton is developed publicly. Issues and pull requests are welcome.' },
     product: { back: 'All products', moreTools: 'More Soliton tools', viewDetails: 'View details', allProducts: 'All products' },
   },
   tr: {
@@ -136,11 +138,12 @@ export const home: Record<Locale, HomeCopy> = {
       watch: 'İzle',
       note: 'Yeni araçlar çıktıklarında kendi repolarıyla gelir. Organizasyonu takip edin, ortaya çıktıklarını görün.',
     },
-    oss: {
-      eyebrow: 'Açıkta geliştirilir',
-      title: 'Oku. Çalıştır. Düzelt.',
-      body: 'Soliton herkesin gözü önünde geliştirilir. Issue ve pull request’ler memnuniyetle karşılanır.',
+    incoming: {
+      eyebrow: 'Yolda',
+      title: 'Daha fazla araç yolda.',
+      lead: 'Her biri tek bir iş yapar. Biri çıktığında haberdar olmak için Soliton’u GitHub’da takip edin.',
     },
+    oss: { body: 'Soliton herkesin gözü önünde geliştirilir. Issue ve pull request’ler memnuniyetle karşılanır.' },
     product: { back: 'Tüm ürünler', moreTools: 'Diğer Soliton araçları', viewDetails: 'Ayrıntıları gör', allProducts: 'Tüm ürünler' },
   },
 };

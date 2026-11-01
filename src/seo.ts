@@ -23,13 +23,13 @@ export const websiteLd = (locale: Locale) => ({
 });
 
 /** Structured data for a product page. Incoming products carry no offer or download. */
-export const softwareLd = (p: Product, locale: Locale, path: string) => {
+export const softwareLd = (p: Product, locale: Locale, path: string, description?: string) => {
   const c = p.copy[locale];
   return {
     '@context': ctx,
     '@type': 'SoftwareApplication',
     name: p.name,
-    description: `${c.tagline} ${c.description}`,
+    description: description ?? `${c.tagline} ${c.description}`,
     applicationCategory: 'DeveloperApplication',
     url: `${origin}${path}`,
     inLanguage: locale,

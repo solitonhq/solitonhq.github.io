@@ -22,6 +22,7 @@ const watchable = products.filter((p) => p.repo);
       {watchable.map((p) => <a class="tk-btn" href={p.repo} rel="noopener">{h.watch} {p.name}</a>)}
     </div>
     <p class="nnote">{h.note}</p>
+    <p class="open">{home[locale].oss.body} <a href={site.githubOrg} rel="noopener">github.com/solitonhq</a></p>
   </div>
 </section>
 
@@ -38,5 +39,7 @@ const watchable = products.filter((p) => p.repo);
   .steps li > span:last-child { color: var(--muted); font-size: 14px; }
   .nacts { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
   .nnote { color: var(--dim); font-size: 13px; margin-top: 22px; font-family: var(--font-mono); letter-spacing: .02em; }
+  .open { margin: 44px auto 0; padding-top: 26px; border-top: 1px solid var(--line); max-width: 560px; color: var(--muted); font-size: 15px; }
+  .open a { color: var(--fg); text-decoration: underline; text-underline-offset: 4px; }
   @media (max-width: 760px) { .steps { grid-template-columns: 1fr; } }
 </style>

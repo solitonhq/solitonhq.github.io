@@ -4,6 +4,7 @@ import Base from '../layouts/Base.astro';
 import ProductChapter from './ProductChapter.astro';
 import ProductStrip from './ProductStrip.astro';
 import Notify from './Notify.astro';
+import IncomingSection from './IncomingSection.astro';
 import { products, statusLabel } from '../i18n/products';
 import { home } from '../i18n/home';
 import { t, type Locale } from '../i18n/ui';
@@ -12,6 +13,9 @@ import { organizationLd, websiteLd } from '../seo';
 interface Props { locale: Locale; }
 const { locale } = Astro.props;
 const h = home[locale];
+const numbers = new Map(products.map((p, i) => [p.slug, i + 1]));
+const shipped = products.filter((p) => p.status !== 'incoming');
+const incoming = products.filter((p) => p.status === 'incoming');
 const featured = products.find((p) => p.featured && p.screens?.length);
 const hero = featured?.screens?.[0];
 const [heroA, ...heroB] = t(locale, 'home.heroTitle').split('. ');
@@ -45,19 +49,12 @@ const [heroA, ...heroB] = t(locale, 'home.heroTitle').split('. ');
   </div>
 
   <div id="tools">
-    {products.map((p, i) => <ProductChapter product={p} locale={locale} index={i} />)}
+    {shipped.map((p) => <ProductChapter product={p} locale={locale} index={numbers.get(p.slug)! - 1} />)}
+    {incoming.length > 0 && <IncomingSection locale={locale} items={incoming} />}
   </div>
 
   <Notify locale={locale} />
 
-  <section class="tk-rule oss">
-    <div class="tk-wrap tk-rv">
-      <div class="tk-eyebrow c">{h.oss.eyebrow}</div>
-      <h2>{h.oss.title}</h2>
-      <p>{h.oss.body}</p>
-      <a class="tk-btn" href={site.githubOrg} rel="noopener">github.com/solitonhq</a>
-    </div>
-  </section>
 </Base>
 
 <style>
@@ -79,11 +76,6 @@ const [heroA, ...heroB] = t(locale, 'home.heroTitle').split('. ');
   .frame :global(img) { width: 100%; height: auto; display: block; }
   #tools > :global(section:first-child) { padding-top: 120px; }
 
-  .c { justify-content: center; }
-  .c::before { display: none; }
-  .oss { text-align: center; padding: 100px 0; }
-  .oss h2 { font-size: clamp(26px, 3.4vw, 40px); letter-spacing: -.03em; font-weight: 600; margin: 16px 0 14px; }
-  .oss p { color: var(--muted); max-width: 52ch; margin: 0 auto 28px; font-size: 17px; }
 </style>
 
 <script>

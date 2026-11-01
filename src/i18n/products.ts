@@ -1,13 +1,7 @@
 import type { ImageMetadata } from 'astro';
 import type { Locale } from './ui';
-import { rudder, type ShotKey } from './rudder';
+import { rudder, shotOrder, type ShotKey } from './rudder';
 import { site } from '../site';
-import overview from '../assets/rudder/overview.png';
-import assessments from '../assets/rudder/assessments.png';
-import topology from '../assets/rudder/topology.png';
-import applications from '../assets/rudder/applications.png';
-import ingressMap from '../assets/rudder/ingress-map.png';
-import pods from '../assets/rudder/pods.png';
 
 /**
  * incoming   : not released yet, shows the "signal incoming" stage
@@ -68,8 +62,9 @@ export const statusLabel: Record<Locale, Record<ProductStatus, string>> = {
   tr: { incoming: 'Yolda', prerelease: 'Ön sürüm', released: 'Yayında' },
 };
 
-const shot = (image: ImageMetadata, k: ShotKey): Screen => ({
-  image,
+const images = import.meta.glob<{ default: ImageMetadata }>('../assets/rudder/*.png', { eager: true });
+const shot = (k: ShotKey): Screen => ({
+  image: images[`../assets/rudder/${k}.png`]!.default,
   copy: {
     en: { label: rudder.en.shots[k].title, alt: rudder.en.shots[k].alt, body: rudder.en.shots[k].body },
     tr: { label: rudder.tr.shots[k].title, alt: rudder.tr.shots[k].alt, body: rudder.tr.shots[k].body },
@@ -132,14 +127,7 @@ export const products: Product[] = [
     customPage: true,
     seo: { os: 'macOS 12 or later', license: 'https://www.apache.org/licenses/LICENSE-2.0', version: site.rudderVersion, downloadUrl: site.rudderReleases },
     repo: site.rudderRepo,
-    screens: [
-      shot(overview, 'overview'),
-      shot(assessments, 'assessments'),
-      shot(topology, 'topology'),
-      shot(applications, 'applications'),
-      shot(ingressMap, 'ingress-map'),
-      shot(pods, 'pods'),
-    ],
+    screens: shotOrder.map(shot),
     actions: [
       { label: { en: 'Download DMG for macOS', tr: 'macOS için DMG indir' }, href: site.rudderReleases, primary: true, external: true },
       { label: { en: 'Opening an unsigned build', tr: 'İmzasız sürümü açma' }, href: site.rudderInstallGuide, external: true },
@@ -150,7 +138,7 @@ export const products: Product[] = [
       en: {
         tagline: 'Kubernetes, steered with confidence.',
         headline: 'Kubernetes, steered with confidence.',
-        description: 'A fast desktop IDE for Kubernetes. Troubleshoot faster, check cluster health and catch problems before they become incidents.',
+        description: rudder.en.lead,
         points: ['Cluster health checks and feasibility reports', 'Faster troubleshooting across workloads and networking', 'Cost analysis, read-only by default, data stays local'],
         features: [
           { title: 'Troubleshoot faster', body: 'Health summaries, runbooks, multi-pod logs, pod shells and debug containers.' },
@@ -162,11 +150,7 @@ export const products: Product[] = [
           { title: 'Self-healing forwards', body: 'Port forwarding that rebinds to a healthy replica after restarts.' },
           { title: 'GitOps & monitoring', body: 'Argo CD, Flux, Helm and Prometheus views, plus plugins.' },
         ],
-        notes: [
-          { title: 'Read-only by default', body: 'Changes are previewed with a dry run and need confirmation.' },
-          { title: 'Private by design', body: 'No telemetry, no account. Credentials stay in your kubeconfig or Keychain.' },
-          { title: 'Open source', body: 'Apache 2.0. Releases ship a checksum, SBOM and attestation.' },
-        ],
+        notes: rudder.en.principles,
         meta: [
           { k: 'version', v: `${site.rudderVersion} · pre-release`, accent: true },
           { k: 'macos', v: 'universal DMG · 12+' },
@@ -174,12 +158,12 @@ export const products: Product[] = [
           { k: 'requires', v: 'a kubeconfig' },
           { k: 'verify', v: 'sha-256 · sbom · attestation' },
         ],
-        blurb: 'Pre-release: expect rough edges and fast iteration. The current build is not yet signed with an Apple Developer ID, so macOS will ask you to confirm the first launch.',
+        blurb: rudder.en.installBody,
       },
       tr: {
         tagline: 'Kubernetes, güvenle yönlendirilir.',
         headline: 'Kubernetes, güvenle yönlendirilir.',
-        description: 'Kubernetes için hızlı bir masaüstü IDE. Sorunları daha hızlı çözün, cluster sağlığını kontrol edin ve sorunları olaya dönüşmeden yakalayın.',
+        description: rudder.tr.lead,
         points: ['Cluster sağlık kontrolleri ve uygunluk raporları', 'İş yükleri ve ağ genelinde daha hızlı sorun giderme', 'Maliyet analizi, varsayılan olarak salt okunur, veriler yerelde kalır'],
         features: [
           { title: 'Daha hızlı sorun giderme', body: 'Sağlık özetleri, runbook’lar, çoklu pod logları, pod shell’leri ve debug container’ları.' },
@@ -191,11 +175,7 @@ export const products: Product[] = [
           { title: 'Kendini onaran yönlendirme', body: 'Yeniden başlatmalardan sonra sağlıklı bir replika’ya yeniden bağlanan port yönlendirme.' },
           { title: 'GitOps ve izleme', body: 'Argo CD, Flux, Helm ve Prometheus görünümleri, ayrıca eklentiler.' },
         ],
-        notes: [
-          { title: 'Varsayılan olarak salt okunur', body: 'Değişiklikler dry-run ile önizlenir ve onay ister.' },
-          { title: 'Tasarımdan gizli', body: 'Telemetri yok, hesap yok. Kimlik bilgileri kubeconfig’inizde veya Keychain’de kalır.' },
-          { title: 'Açık kaynak', body: 'Apache 2.0. Sürümler sağlama toplamı, SBOM ve attestation ile gelir.' },
-        ],
+        notes: rudder.tr.principles,
         meta: [
           { k: 'sürüm', v: `${site.rudderVersion} · ön sürüm`, accent: true },
           { k: 'macos', v: 'universal DMG · 12+' },
@@ -203,7 +183,7 @@ export const products: Product[] = [
           { k: 'gereksinim', v: 'bir kubeconfig' },
           { k: 'doğrula', v: 'sha-256 · sbom · attestation' },
         ],
-        blurb: 'Ön sürüm: pürüzler ve hızlı değişim bekleyin. Mevcut sürüm henüz Apple Developer ID ile imzalı değil, bu yüzden macOS ilk açılışta onay isteyecek.',
+        blurb: rudder.tr.installBody,
       },
     },
   },
