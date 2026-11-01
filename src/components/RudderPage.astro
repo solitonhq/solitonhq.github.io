@@ -5,14 +5,17 @@ import Base from '../layouts/Base.astro';
 import { rudder, shotOrder, type ShotKey } from '../i18n/rudder';
 import { localePath, type Locale } from '../i18n/ui';
 import { site } from '../site';
+import { products } from '../i18n/products';
+import { softwareLd } from '../seo';
 interface Props { locale: Locale; }
 const { locale } = Astro.props;
 const c = rudder[locale];
 const images = import.meta.glob<{ default: ImageMetadata }>('../assets/rudder/*.png', { eager: true });
 const shot = (k: ShotKey) => images[`../assets/rudder/${k}.png`]!.default;
 const [hero, ...rest] = shotOrder;
+const product = products.find((p) => p.slug === 'rudder')!;
 ---
-<Base title={c.title} description={c.description}>
+<Base title={c.title} description={c.description} jsonLd={softwareLd(product, locale, localePath(locale, '/products/soliton-rudder/'))}>
   <section class="mx-auto max-w-6xl px-4 pb-12 pt-16 sm:px-6 sm:pt-24">
     <a href={localePath(locale, '/products/')} class="text-sm text-muted hover:text-fg">← {c.back}</a>
     <div class="mt-6 flex flex-wrap items-center gap-3">

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://solitonhq.github.io/sitemap-index.xml

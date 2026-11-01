@@ -2,6 +2,8 @@
 export const site = {
   name: 'Soliton',
   githubOrg: 'https://github.com/solitonhq',
+  /** Current Rudder release. Update here and every page, in both languages, follows. */
+  rudderVersion: '0.2.0',
   rudderRepo: 'https://github.com/solitonhq/soliton-rudder',
   rudderReleases: 'https://github.com/solitonhq/soliton-rudder/releases',
   rudderInstallGuide: 'https://github.com/solitonhq/soliton-rudder/blob/main/docs/INSTALL.md#opening-an-unsigned-build',

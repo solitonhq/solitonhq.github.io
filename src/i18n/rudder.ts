@@ -1,4 +1,5 @@
 import type { Locale } from './ui';
+import { site } from '../site';
 
 export type ShotKey =
   | 'overview'
@@ -60,7 +61,7 @@ export const rudder: Record<Locale, RudderCopy> = {
     eyebrow: 'Soliton Rudder',
     lead: 'A fast desktop IDE for Kubernetes. Troubleshoot faster, check cluster health, and see what needs attention before it becomes an incident.',
     status: 'Pre-release',
-    statusNote: 'Version 0.2.0, an early pre-release for macOS. Expect rough edges and fast iteration.',
+    statusNote: `Version ${site.rudderVersion}, an early pre-release for macOS. Expect rough edges and fast iteration.`,
     shotsTitle: 'See your cluster clearly',
     shotsLead: 'Everything below is a real Soliton Rudder window connected to a local demo cluster.',
     shots: {
@@ -95,7 +96,7 @@ export const rudder: Record<Locale, RudderCopy> = {
       { title: 'Open source', body: 'Licensed under the Apache License 2.0 and developed in the open.' },
     ],
     installTitle: 'Get it',
-    installBody: 'Soliton Rudder 0.2.0 is a pre-release. The macOS build is not yet signed with an Apple Developer ID, so macOS warns the first time you open it. The install guide shows how to open it safely.',
+    installBody: `Soliton Rudder ${site.rudderVersion} is a pre-release. The macOS build is not yet signed with an Apple Developer ID, so macOS warns the first time you open it. The install guide shows how to open it safely.`,
     platforms: [
       { name: 'macOS', detail: 'Universal DMG for Apple silicon and Intel, macOS 12 or newer.', cta: 'Download for macOS' },
       { name: 'Linux', detail: 'Linux builds are planned.', soon: 'Coming soon' },
@@ -118,7 +119,7 @@ export const rudder: Record<Locale, RudderCopy> = {
     eyebrow: 'Soliton Rudder',
     lead: 'Kubernetes için hızlı bir masaüstü IDE. Sorunları daha hızlı giderin, cluster sağlığını kontrol edin ve olay çıkmadan önce neyin ilgi beklediğini görün.',
     status: 'Ön sürüm',
-    statusNote: 'Sürüm 0.2.0, macOS için erken bir ön sürüm. Pürüzler olabilir, hızlı ilerliyoruz.',
+    statusNote: `Sürüm ${site.rudderVersion}, macOS için erken bir ön sürüm. Pürüzler olabilir, hızlı ilerliyoruz.`,
     shotsTitle: 'Cluster’ınızı net görün',
     shotsLead: 'Aşağıdakilerin hepsi, yerel bir demo cluster’a bağlı gerçek Soliton Rudder pencereleridir.',
     shots: {
@@ -153,7 +154,7 @@ export const rudder: Record<Locale, RudderCopy> = {
       { title: 'Açık kaynak', body: 'Apache License 2.0 ile lisanslıdır ve açıkta geliştirilir.' },
     ],
     installTitle: 'Edinin',
-    installBody: 'Soliton Rudder 0.2.0 bir ön sürümdür. macOS sürümü henüz Apple Developer ID ile imzalı değil; bu yüzden macOS ilk açılışta uyarı verir. Kurulum rehberi güvenle nasıl açacağınızı gösterir.',
+    installBody: `Soliton Rudder ${site.rudderVersion} bir ön sürümdür. macOS sürümü henüz Apple Developer ID ile imzalı değil; bu yüzden macOS ilk açılışta uyarı verir. Kurulum rehberi güvenle nasıl açacağınızı gösterir.`,
     platforms: [
       { name: 'macOS', detail: 'Apple silicon ve Intel için evrensel DMG, macOS 12 veya üstü.', cta: 'macOS için indir' },
       { name: 'Linux', detail: 'Linux sürümleri planlanıyor.', soon: 'Yakında' },

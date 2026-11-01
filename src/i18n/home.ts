@@ -10,12 +10,15 @@ export interface HomeCopy {
   chapter: {
     getIt: string;
     stayOnWave: string;
-    notifyCta: string;
+    howNotify: string;
+    watchGithub: string;
     followGithub: string;
     teaserLabel: string;
     teaserFoot: string;
     teaserFootHint: string;
     screensLabel: string;
+    demoNote: string;
+    swipe: string;
     detailsLabel: string;
     incomingWord: string;
   };
@@ -44,12 +47,15 @@ export const home: Record<Locale, HomeCopy> = {
     chapter: {
       getIt: 'Get it',
       stayOnWave: 'Stay on the wave',
-      notifyCta: 'Notify me when it lands',
-      followGithub: 'Follow on GitHub',
+      howNotify: 'How notifications work',
+      watchGithub: 'Watch on GitHub',
+      followGithub: 'Follow Soliton on GitHub',
       teaserLabel: 'is not released yet',
       teaserFoot: 'signal',
-      teaserFootHint: 'notify me when it lands',
+      teaserFootHint: 'follow on GitHub for launch news',
       screensLabel: 'screens',
+      swipe: 'Swipe sideways to explore',
+      demoNote: 'Screens come from a local demo cluster with sample workloads. No real data is shown.',
       detailsLabel: 'Details',
       incomingWord: 'incoming',
     },
@@ -69,7 +75,7 @@ export const home: Record<Locale, HomeCopy> = {
       title: 'Be the first to know when a tool lands.',
       lead: 'GitHub does the notifying: no newsletter, no tracking, no account with us.',
       steps: [
-        { title: 'Open the repository', body: 'Go to the tool’s page on GitHub.' },
+        { title: 'Open the repository', body: 'Soliton Rudder has one today. New tools get theirs at launch.' },
         { title: 'Choose Watch → Custom', body: 'Use the Watch menu at the top right.' },
         { title: 'Tick Releases', body: 'You will be notified the moment a release is published.' },
       ],
@@ -94,12 +100,15 @@ export const home: Record<Locale, HomeCopy> = {
     chapter: {
       getIt: 'İndir',
       stayOnWave: 'Dalgada kal',
-      notifyCta: 'Çıkınca haber ver',
-      followGithub: 'GitHub’da takip et',
+      howNotify: 'Bildirimler nasıl çalışır',
+      watchGithub: 'GitHub’da izle',
+      followGithub: 'Soliton’u GitHub’da takip et',
       teaserLabel: 'henüz yayında değil',
       teaserFoot: 'sinyal',
-      teaserFootHint: 'çıkınca haber ver',
+      teaserFootHint: 'duyurular için GitHub’da takip edin',
       screensLabel: 'ekranlar',
+      swipe: 'Kaydırarak inceleyin',
+      demoNote: 'Ekranlar, örnek iş yükleri olan yerel bir demo cluster’dan alınmıştır. Gerçek veri gösterilmez.',
       detailsLabel: 'Ayrıntılar',
       incomingWord: 'yolda',
     },
@@ -119,7 +128,7 @@ export const home: Record<Locale, HomeCopy> = {
       title: 'Bir araç çıktığında ilk siz öğrenin.',
       lead: 'Bildirimi GitHub yapar: bülten yok, izleme yok, bizde hesap yok.',
       steps: [
-        { title: 'Repoyu açın', body: 'Aracın GitHub sayfasına gidin.' },
+        { title: 'Repoyu açın', body: 'Bugün Soliton Rudder’ın var. Yeni araçların repoları çıkışta açılır.' },
         { title: 'Watch → Custom seçin', body: 'Sağ üstteki Watch menüsünü kullanın.' },
         { title: 'Releases’i işaretleyin', body: 'Bir sürüm yayınlandığı anda bildirim alırsınız.' },
       ],

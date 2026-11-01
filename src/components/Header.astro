@@ -44,14 +44,20 @@ const langHref = switchLocalePath(Astro.url.pathname, other);
     </a>
 
     <nav aria-label="Primary" class="hidden items-center gap-6 text-sm text-muted md:flex">
-      {items.map((i) =>
+      {items.map((i, n) =>
         i.children ? (
-          <div class="group relative">
-            <a class="flex items-center gap-1 py-4 hover:text-fg group-focus-within:text-fg" href={i.href}>
-              {t(locale, i.key)}
-              <svg class="size-3 opacity-60 transition group-hover:rotate-180 group-focus-within:rotate-180" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5" /></svg>
-            </a>
-            <div class="invisible absolute left-1/2 top-full z-50 w-64 -translate-x-1/2 opacity-0 transition duration-150 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+          <div class="menu-root relative flex items-center" data-menu data-open="false">
+            <a class="py-4 hover:text-fg" href={i.href}>{t(locale, i.key)}</a>
+            <button
+              type="button"
+              class="ml-1 grid size-6 place-items-center rounded-sm hover:text-fg"
+              aria-expanded="false"
+              aria-controls={`submenu-${n}`}
+              aria-label={`${t(locale, i.key)}: ${t(locale, 'nav.menu')}`}
+            >
+              <svg class="chev size-3 opacity-60 transition" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5" /></svg>
+            </button>
+            <div id={`submenu-${n}`} class="panel invisible absolute left-1/2 top-full z-50 w-64 -translate-x-1/2 opacity-0 transition duration-150">
               <div class="border border-line-2 bg-surface p-1.5 shadow-2xl shadow-black/60">
                 {i.children.map((c) => (
                   <a class="flex items-center justify-between gap-3 px-3 py-2.5 hover:bg-bg-2 hover:text-fg" href={c.href}>
@@ -95,9 +101,30 @@ const langHref = switchLocalePath(Astro.url.pathname, other);
 
 <style>
   .menu summary::-webkit-details-marker { display: none; }
+  .menu-root[data-open='true'] .panel { visibility: visible; opacity: 1; }
+  .menu-root[data-open='true'] .chev { transform: rotate(180deg); }
 </style>
 
 <script>
+  // Desktop submenus: open on mouse hover, keyboard focus or tap; Escape closes. aria-expanded follows the state.
+  document.querySelectorAll<HTMLElement>('[data-menu]').forEach((root) => {
+    const btn = root.querySelector('button')!;
+    let timer = 0;
+    let skipFocus = false;
+    const set = (open: boolean) => {
+      clearTimeout(timer);
+      root.dataset.open = String(open);
+      btn.setAttribute('aria-expanded', String(open));
+    };
+    root.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') set(true); });
+    root.addEventListener('pointerleave', (e) => { if (e.pointerType === 'mouse') timer = window.setTimeout(() => set(false), 120); });
+    root.addEventListener('focusin', (e) => { if (!skipFocus && (e.target as HTMLElement).matches(':focus-visible')) set(true); });
+    root.addEventListener('focusout', (e) => { if (!root.contains(e.relatedTarget as Node | null)) set(false); });
+    root.addEventListener('keydown', (e) => { if (e.key === 'Escape') { set(false); skipFocus = true; btn.focus(); skipFocus = false; } });
+    btn.addEventListener('click', () => set(root.dataset.open !== 'true'));
+    document.addEventListener('pointerdown', (e) => { if (!root.contains(e.target as Node)) set(false); });
+  });
+
   // Close the mobile menu after picking an in-page link.
   document.querySelectorAll<HTMLDetailsElement>('details.menu').forEach((d) => {
     d.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => (d.open = false)));

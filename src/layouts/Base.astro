@@ -4,8 +4,10 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { locales, localeFromPath, switchLocalePath, t } from '../i18n/ui';
 
-interface Props { title: string; description: string; noindex?: boolean; }
-const { title, description, noindex = false } = Astro.props;
+interface Props { title: string; description: string; noindex?: boolean; /** Schema.org objects for this page. */ jsonLd?: object | object[]; }
+const { title, description, noindex = false, jsonLd } = Astro.props;
+// Escape "<" so the data can never close the script tag.
+const ld = jsonLd ? JSON.stringify(jsonLd).replace(/</g, '\\u003c') : null;
 const locale = localeFromPath(Astro.url.pathname);
 const site = Astro.site!;
 const canonical = new URL(Astro.url.pathname, site).href;
@@ -39,6 +41,7 @@ const fullTitle = title === 'Soliton' ? 'Soliton' : `${title} · Soliton`;
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="color-scheme" content="dark" />
     <meta name="theme-color" content="#050506" />
+    {ld && <script type="application/ld+json" set:html={ld} />}
   </head>
   <body class="flex flex-col">
     <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-accent focus:px-3 focus:py-2 focus:text-accent-fg">{t(locale, 'nav.skip')}</a>

@@ -8,6 +8,7 @@ import { products, statusLabel } from '../i18n/products';
 import { home } from '../i18n/home';
 import { t, type Locale } from '../i18n/ui';
 import { site } from '../site';
+import { organizationLd, websiteLd } from '../seo';
 interface Props { locale: Locale; }
 const { locale } = Astro.props;
 const h = home[locale];
@@ -16,7 +17,7 @@ const hero = featured?.screens?.[0];
 const [heroA, ...heroB] = t(locale, 'home.heroTitle').split('. ');
 
 ---
-<Base title={t(locale, 'home.title')} description={t(locale, 'home.description')}>
+<Base title={t(locale, 'home.title')} description={t(locale, 'home.description')} jsonLd={[organizationLd(), websiteLd(locale)]}>
   <script is:inline>document.documentElement.classList.add('js')</script>
 
   <div class="hero" id="top">
@@ -126,8 +127,22 @@ const [heroA, ...heroB] = t(locale, 'home.heroTitle').split('. ');
         g2.addColorStop(0, 'rgba(92,200,255,0)'); g2.addColorStop(.5, `rgba(92,200,255,${al})`); g2.addColorStop(1, 'rgba(92,200,255,0)');
         ctx.strokeStyle = g2; ctx.stroke();
       }
-      if (!reduce) requestAnimationFrame(draw);
     };
-    requestAnimationFrame((t) => draw(reduce ? 9000 : t));
+    // Animate only while the hero is on screen and the tab is visible.
+    let raf = 0;
+    let onScreen = true;
+    const tick = (t: number) => {
+      draw(t);
+      raf = !reduce && onScreen && !document.hidden ? requestAnimationFrame(tick) : 0;
+    };
+    const kick = () => {
+      if (!raf && !reduce && onScreen && !document.hidden) raf = requestAnimationFrame(tick);
+    };
+    if (reduce) draw(9000);
+    else {
+      new IntersectionObserver(([e]) => { onScreen = !!e?.isIntersecting; kick(); }).observe(canvas);
+      document.addEventListener('visibilitychange', kick);
+      kick();
+    }
   }
 </script>

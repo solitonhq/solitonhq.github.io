@@ -51,6 +51,8 @@ export interface Product {
   status: ProductStatus;
   /** Its first screenshot is shown in the hero. Only one product should set this. */
   featured?: boolean;
+  /** Facts used for search-engine structured data. */
+  seo?: { os?: string; license?: string; version?: string; downloadUrl?: string };
   /** True when the product has a hand-written page under src/pages instead of the generated one. */
   customPage?: boolean;
   /** Public GitHub repository, once it exists. */
@@ -96,9 +98,9 @@ export const products: Product[] = [
           { k: 'status', v: 'incoming', accent: true },
           { k: 'category', v: 'ssh manager · local terminal' },
           { k: 'workflow', v: 'keyboard-first' },
-          { k: 'notify', v: 'on release', accent: true },
+          { k: 'notify', v: 'github · watch releases', accent: true },
         ],
-        blurb: 'Soliton Term is in final preparation. Watch the repository on GitHub and you will hear the moment it lands.',
+        blurb: 'Soliton Term is in final preparation. Follow Soliton on GitHub: its repository appears there at launch, and Watch → Releases will notify you.',
       },
       tr: {
         tagline: 'SSH ve terminal, düzenli.',
@@ -115,9 +117,9 @@ export const products: Product[] = [
           { k: 'durum', v: 'yolda', accent: true },
           { k: 'kategori', v: 'ssh yöneticisi · yerel terminal' },
           { k: 'akış', v: 'klavye odaklı' },
-          { k: 'bildirim', v: 'çıkışta', accent: true },
+          { k: 'bildirim', v: 'github · releases izle', accent: true },
         ],
-        blurb: 'Soliton Term son hazırlıklarda. GitHub’da repoyu izleyin, çıktığı anda haberiniz olsun.',
+        blurb: 'Soliton Term son hazırlıklarda. GitHub’da Soliton’u takip edin: depo çıkışta orada belirir ve Watch → Releases size haber verir.',
       },
     },
   },
@@ -128,6 +130,7 @@ export const products: Product[] = [
     status: 'prerelease',
     featured: true,
     customPage: true,
+    seo: { os: 'macOS 12 or later', license: 'https://www.apache.org/licenses/LICENSE-2.0', version: site.rudderVersion, downloadUrl: site.rudderReleases },
     repo: site.rudderRepo,
     screens: [
       shot(overview, 'overview'),
@@ -147,7 +150,7 @@ export const products: Product[] = [
       en: {
         tagline: 'Kubernetes, steered with confidence.',
         headline: 'Kubernetes, steered with confidence.',
-        description: 'A fast desktop IDE for Kubernetes. Troubleshoot faster, check cluster health and catch problems before they become incidents. Screens below come from a local demo cluster.',
+        description: 'A fast desktop IDE for Kubernetes. Troubleshoot faster, check cluster health and catch problems before they become incidents.',
         points: ['Cluster health checks and feasibility reports', 'Faster troubleshooting across workloads and networking', 'Cost analysis, read-only by default, data stays local'],
         features: [
           { title: 'Troubleshoot faster', body: 'Health summaries, runbooks, multi-pod logs, pod shells and debug containers.' },
@@ -165,7 +168,7 @@ export const products: Product[] = [
           { title: 'Open source', body: 'Apache 2.0. Releases ship a checksum, SBOM and attestation.' },
         ],
         meta: [
-          { k: 'version', v: '0.2.0 · pre-release', accent: true },
+          { k: 'version', v: `${site.rudderVersion} · pre-release`, accent: true },
           { k: 'macos', v: 'universal DMG · 12+' },
           { k: 'linux', v: 'coming soon' },
           { k: 'requires', v: 'a kubeconfig' },
@@ -176,7 +179,7 @@ export const products: Product[] = [
       tr: {
         tagline: 'Kubernetes, güvenle yönlendirilir.',
         headline: 'Kubernetes, güvenle yönlendirilir.',
-        description: 'Kubernetes için hızlı bir masaüstü IDE. Sorunları daha hızlı çözün, cluster sağlığını kontrol edin ve sorunları olaya dönüşmeden yakalayın. Aşağıdaki ekranlar yerel bir demo cluster’dan alınmıştır.',
+        description: 'Kubernetes için hızlı bir masaüstü IDE. Sorunları daha hızlı çözün, cluster sağlığını kontrol edin ve sorunları olaya dönüşmeden yakalayın.',
         points: ['Cluster sağlık kontrolleri ve uygunluk raporları', 'İş yükleri ve ağ genelinde daha hızlı sorun giderme', 'Maliyet analizi, varsayılan olarak salt okunur, veriler yerelde kalır'],
         features: [
           { title: 'Daha hızlı sorun giderme', body: 'Sağlık özetleri, runbook’lar, çoklu pod logları, pod shell’leri ve debug container’ları.' },
@@ -194,7 +197,7 @@ export const products: Product[] = [
           { title: 'Açık kaynak', body: 'Apache 2.0. Sürümler sağlama toplamı, SBOM ve attestation ile gelir.' },
         ],
         meta: [
-          { k: 'sürüm', v: '0.2.0 · ön sürüm', accent: true },
+          { k: 'sürüm', v: `${site.rudderVersion} · ön sürüm`, accent: true },
           { k: 'macos', v: 'universal DMG · 12+' },
           { k: 'linux', v: 'yakında' },
           { k: 'gereksinim', v: 'bir kubeconfig' },
@@ -225,9 +228,9 @@ export const products: Product[] = [
           { k: 'status', v: 'incoming', accent: true },
           { k: 'category', v: 'password manager' },
           { k: 'surfaces', v: 'web app · chrome extension' },
-          { k: 'notify', v: 'on release', accent: true },
+          { k: 'notify', v: 'github · watch releases', accent: true },
         ],
-        blurb: 'Soliton Pass is in final preparation. Watch the repository on GitHub and you will hear the moment it lands.',
+        blurb: 'Soliton Pass is in final preparation. Follow Soliton on GitHub: its repository appears there at launch, and Watch → Releases will notify you.',
       },
       tr: {
         tagline: 'Kişiler ve ekipler için parola yönetimi.',
@@ -244,9 +247,9 @@ export const products: Product[] = [
           { k: 'durum', v: 'yolda', accent: true },
           { k: 'kategori', v: 'parola yöneticisi' },
           { k: 'yüzeyler', v: 'web uygulaması · chrome eklentisi' },
-          { k: 'bildirim', v: 'çıkışta', accent: true },
+          { k: 'bildirim', v: 'github · releases izle', accent: true },
         ],
-        blurb: 'Soliton Pass son hazırlıklarda. GitHub’da repoyu izleyin, çıktığı anda haberiniz olsun.',
+        blurb: 'Soliton Pass son hazırlıklarda. GitHub’da Soliton’u takip edin: depo çıkışta orada belirir ve Watch → Releases size haber verir.',
       },
     },
   },
@@ -271,9 +274,9 @@ export const products: Product[] = [
           { k: 'status', v: 'incoming', accent: true },
           { k: 'category', v: 'team wiki' },
           { k: 'formats', v: 'md · pdf' },
-          { k: 'notify', v: 'on release', accent: true },
+          { k: 'notify', v: 'github · watch releases', accent: true },
         ],
-        blurb: 'Soliton Wiki is in final preparation. Watch the repository on GitHub and you will hear the moment it lands.',
+        blurb: 'Soliton Wiki is in final preparation. Follow Soliton on GitHub: its repository appears there at launch, and Watch → Releases will notify you.',
       },
       tr: {
         tagline: 'Yazılım ekipleri için hafif, hızlı wiki.',
@@ -290,9 +293,9 @@ export const products: Product[] = [
           { k: 'durum', v: 'yolda', accent: true },
           { k: 'kategori', v: 'ekip wiki’si' },
           { k: 'formatlar', v: 'md · pdf' },
-          { k: 'bildirim', v: 'çıkışta', accent: true },
+          { k: 'bildirim', v: 'github · releases izle', accent: true },
         ],
-        blurb: 'Soliton Wiki son hazırlıklarda. GitHub’da repoyu izleyin, çıktığı anda haberiniz olsun.',
+        blurb: 'Soliton Wiki son hazırlıklarda. GitHub’da Soliton’u takip edin: depo çıkışta orada belirir ve Watch → Releases size haber verir.',
       },
     },
   },
