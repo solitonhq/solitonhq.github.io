@@ -165,7 +165,7 @@ export const products: Product[] = [
           { title: 'Open source', body: 'Apache 2.0. Releases ship a checksum, SBOM and attestation.' },
         ],
         meta: [
-          { k: 'version', v: '0.1.0 · pre-release', accent: true },
+          { k: 'version', v: '0.2.0 · pre-release', accent: true },
           { k: 'macos', v: 'universal DMG · 12+' },
           { k: 'linux', v: 'coming soon' },
           { k: 'requires', v: 'a kubeconfig' },
@@ -194,7 +194,7 @@ export const products: Product[] = [
           { title: 'Açık kaynak', body: 'Apache 2.0. Sürümler sağlama toplamı, SBOM ve attestation ile gelir.' },
         ],
         meta: [
-          { k: 'sürüm', v: '0.1.0 · ön sürüm', accent: true },
+          { k: 'sürüm', v: '0.2.0 · ön sürüm', accent: true },
           { k: 'macos', v: 'universal DMG · 12+' },
           { k: 'linux', v: 'yakında' },
           { k: 'gereksinim', v: 'bir kubeconfig' },
