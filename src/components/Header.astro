@@ -20,12 +20,12 @@ const items: Item[] = [
       { label: `${t(locale, 'nav.allProducts')} →`, href: path('/products/') },
     ],
   },
-  { key: 'nav.approach' as UIKey, href: `${home}#approach` },
   {
     key: 'nav.about',
     href: path('/about/'),
     children: [
       { label: t(locale, 'nav.about'), href: path('/about/') },
+      { label: t(locale, 'nav.approach'), href: `${path('/about/')}#approach` },
       { label: t(locale, 'nav.brand'), href: path('/brand/') },
       { label: t(locale, 'nav.openSource'), href: path('/open-source/') },
     ],

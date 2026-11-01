@@ -25,3 +25,6 @@
 /* scroll reveal: only hidden when JS is present to reveal it again */
 .js .tk-rv { opacity: 0; transform: translateY(18px); }
 .js .tk-rv.in { opacity: 1; transform: none; transition: opacity .7s ease, transform .7s ease; }
+/* fail-safe: if the reveal script never ran, show everything after 3s instead of leaving it hidden */
+.js:not(.rv-ready) .tk-rv { animation: tk-failsafe .01s 3s forwards; }
+@keyframes tk-failsafe { to { opacity: 1; transform: none; } }

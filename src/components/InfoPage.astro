@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import BrandKit from './BrandKit.astro';
+import Approach from './Approach.astro';
 import { pages, pageUi, type PageKey } from '../i18n/pages';
 import { localePath, type Locale } from '../i18n/ui';
 import { site } from '../site';
@@ -43,6 +44,7 @@ const profiles = [
 
     {page === 'privacy' && <p class="mt-12 text-sm text-muted">{u.updated}: {site.lastUpdated}</p>}
   </article>
+  {page === 'about' && <Approach locale={locale} pillars={false} />}
   {page === 'brand' && (
     <div class="tk-wrap pb-24"><BrandKit locale={locale} /></div>
   )}

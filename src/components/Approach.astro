@@ -1,0 +1,51 @@
+---
+import { home } from '../i18n/home';
+import type { Locale } from '../i18n/ui';
+interface Props {
+  locale: Locale;
+  /** Show the three principles. Off where the surrounding page already lists them. */
+  pillars?: boolean;
+}
+const { locale, pillars = true } = Astro.props;
+const a = home[locale].approach;
+
+// Soliton formula diagram, drawn at build time.
+const diagram = Array.from({ length: 141 }, (_, i) => {
+  const x = i * 4;
+  const s = 1 / Math.cosh((x - 280) / 38);
+  return `${i ? 'L' : 'M'}${x} ${(300 - s * s * 190).toFixed(1)}`;
+}).join('');
+---
+<section id="approach" class="tk-section tk-alt">
+  <div class="tk-wrap phil">
+    <div>
+      <div class="tk-eyebrow">{a.eyebrow}</div>
+      <div class="tk-head" style="margin:16px 0 0">
+        <h2>{a.title}</h2>
+        <p>{a.lead}</p>
+      </div>
+      {pillars && (
+        <div class="pillars">
+          {a.pillars.map((x) => <div><b>{x.title}</b><span>{x.body}</span></div>)}
+        </div>
+      )}
+    </div>
+    <svg viewBox="0 0 560 420" role="img" aria-label={a.diagramAlt}>
+      <defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#5cc8ff" stop-opacity="0" /><stop offset=".5" stop-color="#5cc8ff" /><stop offset="1" stop-color="#5cc8ff" stop-opacity="0" /></linearGradient></defs>
+      <g stroke="#1a1d22" stroke-width="1"><path d="M0 70H560M0 140H560M0 210H560M0 280H560M0 350H560" /><path d="M70 0V420M140 0V420M210 0V420M280 0V420M350 0V420M420 0V420M490 0V420" /></g>
+      <path d={diagram} fill="none" stroke="url(#g)" stroke-width="2" />
+      <path d="M0 300H560" stroke="#272c33" stroke-dasharray="3 6" />
+      <text x="22" y="396" fill="#7b858f" font-family="ui-monospace,monospace" font-size="11" letter-spacing="2">u(x,t) = A · sech²(k(x − ct))</text>
+    </svg>
+  </div>
+</section>
+
+<style>
+  .phil { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+  .phil svg { width: 100%; height: auto; border: 1px solid var(--line); background: var(--bg-2); }
+  .pillars { display: grid; gap: 26px; margin-top: 34px; }
+  .pillars div { padding-left: 22px; border-left: 1px solid var(--line-2); }
+  .pillars b { display: block; margin-bottom: 4px; }
+  .pillars span { color: var(--muted); font-size: 15px; }
+  @media (max-width: 860px) { .phil { grid-template-columns: 1fr; gap: 40px; } }
+</style>

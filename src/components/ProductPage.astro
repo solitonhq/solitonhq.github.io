@@ -40,17 +40,5 @@ const index = products.findIndex((p) => p.slug === product.slug);
 </style>
 
 <script>
-  // Reveal sections as they scroll into view. Anything already on screen opens immediately.
-  const els = [...document.querySelectorAll('.tk-rv')];
-  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const open = (el: Element) => el.classList.add('in');
-  if (reduce || !('IntersectionObserver' in window)) {
-    els.forEach(open);
-  } else {
-    const io = new IntersectionObserver(
-      (entries) => entries.forEach((e) => { if (e.isIntersecting) { open(e.target); io.unobserve(e.target); } }),
-      { threshold: 0.1 },
-    );
-    els.forEach((el) => (el.getBoundingClientRect().top < innerHeight * 0.95 ? open(el) : io.observe(el)));
-  }
+  import '../scripts/reveal';
 </script>
