@@ -16,6 +16,7 @@ export interface HomeCopy {
     teaserLabel: string;
     teaserFoot: string;
     teaserFootHint: string;
+    teaserNoShots: string;
     screensLabel: string;
     demoNote: string;
     swipe: string;
@@ -54,6 +55,7 @@ export const home: Record<Locale, HomeCopy> = {
       teaserLabel: 'is not released yet',
       teaserFoot: 'signal',
       teaserFootHint: 'follow on GitHub for launch news',
+      teaserNoShots: 'screenshots coming soon',
       screensLabel: 'screens',
       swipe: 'Swipe sideways to explore',
       demoNote: 'Screens come from a local demo cluster with sample workloads. No real data is shown.',
@@ -76,7 +78,7 @@ export const home: Record<Locale, HomeCopy> = {
       title: 'Be the first to know when a tool lands.',
       lead: 'GitHub does the notifying: no newsletter, no tracking, no account with us.',
       steps: [
-        { title: 'Open the repository', body: 'Soliton Rudder has one today. New tools get theirs at launch.' },
+        { title: 'Open the repository', body: 'Released tools have one. New tools get theirs at launch.' },
         { title: 'Choose Watch → Custom', body: 'Use the Watch menu at the top right.' },
         { title: 'Tick Releases', body: 'You will be notified the moment a release is published.' },
       ],
@@ -108,6 +110,7 @@ export const home: Record<Locale, HomeCopy> = {
       teaserLabel: 'henüz yayında değil',
       teaserFoot: 'sinyal',
       teaserFootHint: 'duyurular için GitHub’da takip edin',
+      teaserNoShots: 'ekran görüntüleri yakında',
       screensLabel: 'ekranlar',
       swipe: 'Kaydırarak inceleyin',
       demoNote: 'Ekranlar, örnek iş yükleri olan yerel bir demo cluster’dan alınmıştır. Gerçek veri gösterilmez.',
@@ -130,7 +133,7 @@ export const home: Record<Locale, HomeCopy> = {
       title: 'Bir araç çıktığında ilk siz öğrenin.',
       lead: 'Bildirimi GitHub yapar: bülten yok, izleme yok, bizde hesap yok.',
       steps: [
-        { title: 'Repoyu açın', body: 'Bugün Soliton Rudder’ın var. Yeni araçların repoları çıkışta açılır.' },
+        { title: 'Repoyu açın', body: 'Çıkmış araçların repoları var. Yeni araçlar çıkışta kendi repolarını alır.' },
         { title: 'Watch → Custom seçin', body: 'Sağ üstteki Watch menüsünü kullanın.' },
         { title: 'Releases’i işaretleyin', body: 'Bir sürüm yayınlandığı anda bildirim alırsınız.' },
       ],

@@ -1,0 +1,79 @@
+---
+import Base from '../layouts/Base.astro';
+import { verify } from '../i18n/verify';
+import { home } from '../i18n/home';
+import { site } from '../site';
+import { localePath, type Locale } from '../i18n/ui';
+interface Props { locale: Locale; }
+const { locale } = Astro.props;
+const c = verify[locale];
+const n = (i: number) => String(i).padStart(2, '0');
+
+// One entry per tool that ships downloads. File names follow each repository's release assets.
+const targets = [
+  {
+    name: 'Soliton Term',
+    version: site.termVersion,
+    repo: 'solitonhq/soliton-term',
+    releases: site.termReleases,
+    file: `SolitonTerm_${site.termVersion}_aarch64.dmg`,
+    sbom: 'SolitonTerm-sbom.cdx.json',
+    note: { en: 'On an Intel Mac, use the _x64 file instead of _aarch64.', tr: 'Intel Mac’te _aarch64 yerine _x64 dosyasını kullanın.' },
+  },
+  {
+    name: 'Soliton Rudder',
+    version: site.rudderVersion,
+    repo: 'solitonhq/soliton-rudder',
+    releases: site.rudderReleases,
+    file: `SolitonRudder-${site.rudderVersion}-universal.dmg`,
+    sbom: 'SolitonRudder-sbom.cdx.json',
+    note: { en: 'One universal DMG covers Apple silicon and Intel.', tr: 'Tek bir universal DMG hem Apple silicon’ı hem Intel’i kapsar.' },
+  },
+];
+const commands = (t: (typeof targets)[number]) =>
+  [
+    `shasum -a 256 -c ${t.file}.sha256`,
+    `gh attestation verify ${t.file} --repo ${t.repo}`,
+    `jq '.components | length' ${t.sbom}`,
+  ].join('\n');
+---
+<Base title={c.title} description={c.description}>
+  <article class="mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:py-24">
+    <a class="back" href={localePath(locale, '/products/')}>← {home[locale].product.back}</a>
+    <h1 class="mt-6 text-4xl font-semibold tracking-tight sm:text-5xl">{c.title}</h1>
+    <p class="mt-6 text-lg text-muted">{c.lead}</p>
+
+    <ol class="steps">
+      {c.steps.map((s, i) => (
+        <li><span class="idx">{n(i + 1)}</span><div><h2>{s.title}</h2><p>{s.body}</p></div></li>
+      ))}
+    </ol>
+
+    <h2 class="mt-16 text-2xl font-semibold tracking-tight">{c.commandsTitle}</h2>
+    <p class="mt-2 text-muted">{c.commandsLead}</p>
+    {targets.map((t) => (
+      <section class="target">
+        <div class="head"><h3>{t.name} {t.version}</h3><a href={t.releases} rel="noopener">{c.releases} →</a></div>
+        <pre><code>{commands(t)}</code></pre>
+        <p>{t.note[locale]}</p>
+      </section>
+    ))}
+  </article>
+</Base>
+
+<style>
+  .back { font-family: var(--font-mono); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+  .back:hover { color: var(--fg); }
+  .steps { list-style: none; margin-top: 48px; border-top: 1px solid var(--line); }
+  .steps li { display: grid; grid-template-columns: 48px 1fr; gap: 8px; padding: 22px 0; border-bottom: 1px solid var(--line); }
+  .idx { font-family: var(--font-mono); font-size: 11px; letter-spacing: .14em; color: var(--accent); padding-top: 6px; }
+  .steps h2 { font-size: 18px; font-weight: 600; letter-spacing: -.01em; }
+  .steps p { margin-top: 6px; color: var(--muted); }
+  .target { margin-top: 28px; }
+  .head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap; }
+  .head h3 { font-size: 18px; font-weight: 600; }
+  .head a { font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  .head a:hover { color: var(--accent); }
+  pre { margin-top: 10px; padding: 16px 18px; background: var(--surface); border: 1px solid var(--line-2); overflow-x: auto; font-family: var(--font-mono); font-size: 13px; line-height: 1.8; color: var(--fg); }
+  .target p { margin-top: 8px; color: var(--dim); font-size: 13px; }
+</style>

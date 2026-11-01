@@ -5,6 +5,7 @@ import ProductChapter from './ProductChapter.astro';
 import ProductStrip from './ProductStrip.astro';
 import Notify from './Notify.astro';
 import IncomingSection from './IncomingSection.astro';
+import Faq from './Faq.astro';
 import { products, statusLabel } from '../i18n/products';
 import { home } from '../i18n/home';
 import { t, type Locale } from '../i18n/ui';
@@ -52,6 +53,8 @@ const [heroA, ...heroB] = t(locale, 'home.heroTitle').split('. ');
     {shipped.map((p) => <ProductChapter product={p} locale={locale} index={numbers.get(p.slug)! - 1} />)}
     {incoming.length > 0 && <IncomingSection locale={locale} items={incoming} />}
   </div>
+
+  <Faq locale={locale} />
 
   <Notify locale={locale} />
 

@@ -1,0 +1,77 @@
+---
+import type { ProductExtras } from '../i18n/products';
+import { localePath, type Locale } from '../i18n/ui';
+interface Props { locale: Locale; extras: ProductExtras; }
+const { locale, extras: x } = Astro.props;
+const n = (i: number) => String(i).padStart(2, '0');
+const href = (l: { href: string; external?: boolean }) => (l.external ? l.href : localePath(locale, l.href));
+---
+<section class="tk-section tk-rule tk-alt">
+  <div class="tk-wrap">
+    <div class="tk-eyebrow">{x.fitsTitle}</div>
+    <ul class="fits">
+      {x.fits.map((f) => <li><b>{f.situation}</b><span>{f.answer}</span></li>)}
+    </ul>
+  </div>
+</section>
+
+<section class="tk-section tk-rule">
+  <div class="tk-wrap cols">
+    <div>
+      <div class="tk-eyebrow">{x.requirementsTitle}</div>
+      <ul class="plain">
+        {x.requirements.map((r) => <li>{r}</li>)}
+      </ul>
+      {x.firstLaunch && (
+        <div class="launch">
+          <h3>{x.firstLaunch.title}</h3>
+          <ol>
+            {x.firstLaunch.steps.map((s, i) => (
+              <li>
+                {s}
+                {i === 1 && x.firstLaunch!.command && <pre><code>{x.firstLaunch!.command}</code></pre>}
+              </li>
+            ))}
+          </ol>
+        </div>
+      )}
+      <p class="note">{x.verifyNote}</p>
+      <p class="links">
+        {x.links.map((l) => <a href={href(l)} rel={l.external ? 'noopener' : undefined}>{l.label} →</a>)}
+      </p>
+    </div>
+    <div>
+      <div class="tk-eyebrow">{x.roadmapTitle}</div>
+      <p class="lead">{x.roadmapLead}</p>
+      <ol class="road">
+        {x.roadmap.map((r, i) => <li><span>{n(i + 1)}</span>{r}</li>)}
+      </ol>
+    </div>
+  </div>
+</section>
+
+<style>
+  .fits { list-style: none; margin-top: 26px; border-top: 1px solid var(--line); }
+  .fits li { display: grid; grid-template-columns: minmax(200px, 1fr) 2fr; gap: 32px; padding: 20px 0; border-bottom: 1px solid var(--line); }
+  .fits b { font-weight: 600; font-size: 18px; letter-spacing: -.01em; }
+  .fits span { color: var(--muted); }
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; }
+  .plain { list-style: none; margin-top: 22px; }
+  .plain li { padding: 12px 0; border-top: 1px solid var(--line); color: var(--fg); }
+  .plain li:last-child { border-bottom: 1px solid var(--line); }
+  .launch { margin-top: 32px; }
+  .launch h3 { font-family: var(--font-mono); font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--dim); font-weight: 500; }
+  .launch ol { margin: 14px 0 0 1.4em; display: grid; gap: 12px; color: var(--muted); list-style: decimal; }
+  .launch li::marker { font-family: var(--font-mono); font-size: 12px; color: var(--accent); }
+  pre { margin-top: 10px; padding: 12px 14px; background: var(--surface); border: 1px solid var(--line-2); overflow-x: auto; font-family: var(--font-mono); font-size: 13px; color: var(--fg); }
+  .note { margin-top: 26px; color: var(--muted); font-size: 15px; }
+  .links { margin-top: 18px; display: flex; gap: 22px; flex-wrap: wrap; font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; }
+  .links a { color: var(--muted); }
+  .links a:hover { color: var(--accent); }
+  .lead { margin-top: 22px; color: var(--muted); }
+  .road { list-style: none; margin-top: 16px; }
+  .road li { display: grid; grid-template-columns: 40px 1fr; padding: 12px 0; border-top: 1px solid var(--line); }
+  .road li:last-child { border-bottom: 1px solid var(--line); }
+  .road span { font-family: var(--font-mono); font-size: 11px; letter-spacing: .14em; color: var(--accent); padding-top: 3px; }
+  @media (max-width: 860px) { .cols { grid-template-columns: 1fr; gap: 48px; } .fits li { grid-template-columns: 1fr; gap: 6px; } }
+</style>

@@ -2,7 +2,7 @@
   "ci": {
     "collect": {
       "staticDistDir": "./dist",
-      "url": ["/index.html", "/tr/index.html", "/products/soliton-rudder/index.html", "/products/soliton-term/index.html", "/brand/index.html", "/about/index.html", "/contact/index.html"],
+      "url": ["/index.html", "/tr/index.html", "/products/soliton-rudder/index.html", "/products/soliton-term/index.html", "/brand/index.html", "/about/index.html", "/verify/index.html", "/contact/index.html"],
       "numberOfRuns": 3,
       "settings": { "chromeFlags": "--no-sandbox --headless=new" }
     },

@@ -3,33 +3,27 @@ import Base from '../layouts/Base.astro';
 import ProductChapter from './ProductChapter.astro';
 import ProductStrip from './ProductStrip.astro';
 import Notify from './Notify.astro';
-import { products, productPath, type Feature, type Product } from '../i18n/products';
+import ProductExtras from './ProductExtras.astro';
+import { products, productPath, type Product } from '../i18n/products';
 import { home } from '../i18n/home';
 import { localePath, type Locale } from '../i18n/ui';
 import { softwareLd } from '../seo';
-interface Props {
-  locale: Locale;
-  product: Product;
-  /** Search-engine description, when the product has a longer one than its summary. */
-  description?: string;
-  /** Replaces the feature cells; extra sections can be passed as the slot. */
-  features?: Feature[];
-}
-const { locale, product, description, features } = Astro.props;
+interface Props { locale: Locale; product: Product; }
+const { locale, product } = Astro.props;
 const h = home[locale].product;
 const c = product.copy[locale];
 const index = products.findIndex((p) => p.slug === product.slug);
 ---
-<Base title={product.name} description={description ?? `${c.tagline} ${c.description}`} jsonLd={softwareLd(product, locale, localePath(locale, productPath(product)), description)}>
+<Base title={product.name} description={c.seoDescription ?? `${c.tagline} ${c.description}`} jsonLd={softwareLd(product, locale, localePath(locale, productPath(product)), c.seoDescription)}>
   <script is:inline>document.documentElement.classList.add('js')</script>
 
   <div class="tk-wrap crumb">
     <a href={localePath(locale, '/products/')}>← {h.back}</a>
   </div>
 
-  <ProductChapter product={product} locale={locale} index={index} features={features} page />
+  <ProductChapter product={product} locale={locale} index={index} features={c.detailFeatures} page />
 
-  <slot />
+  {c.extras && <ProductExtras locale={locale} extras={c.extras} />}
 
   <section class="tk-section tk-rule tk-alt more">
     <div class="tk-wrap">

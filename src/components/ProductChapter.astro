@@ -21,7 +21,7 @@ const pulse = Array.from({ length: 86 }, (_, i) => {
   return `${i ? 'L' : 'M'}${x} ${(100 - s * s * 84).toFixed(1)}`;
 }).join('');
 
-const title = incoming ? `${p.name} · ${h.incomingWord}` : p.status === 'released' ? p.name : `${p.name} ${c.meta[0]?.v.split(' ')[0] ?? ''}`.trim();
+const title = incoming ? `${p.name} · ${h.incomingWord}` : `${p.name}${p.seo?.version ? ` ${p.seo.version}` : ''}`;
 ---
 <section class:list={['tk-section', !page && 'tk-rule', !page && index % 2 === 0 && 'tk-alt', 'chapter', page && 'as-page']} id={p.slug}>
   <div class="tk-wrap">
@@ -65,7 +65,10 @@ const title = incoming ? `${p.name} · ${h.incomingWord}` : p.status === 'releas
             <path d="M0 100H800" stroke="#272c33" stroke-dasharray="3 6" />
             <g class="pw"><path d={pulse} fill="none" stroke="#5cc8ff" stroke-width="2" /></g>
           </svg>
-          <div class="foot"><span>{h.teaserFoot} <em>{h.incomingWord}</em></span><span class="hide">{h.teaserFootHint}</span></div>
+          <div class="foot">
+            <span>{incoming ? h.teaserFoot : statusLabel[locale][p.status].toLowerCase()} {incoming && <em>{h.incomingWord}</em>}{!incoming && <em></em>}</span>
+            <span class="hide">{incoming ? h.teaserFootHint : h.teaserNoShots}</span>
+          </div>
         </div>
       )}
 

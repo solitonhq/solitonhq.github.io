@@ -4,6 +4,12 @@ export const site = {
   githubOrg: 'https://github.com/solitonhq',
   /** Current Rudder release. Update here and every page, in both languages, follows. */
   rudderVersion: '0.2.0',
+  /** Current Soliton Term release. */
+  termVersion: '0.1.0',
+  termRepo: 'https://github.com/solitonhq/soliton-term',
+  termReleases: 'https://github.com/solitonhq/soliton-term/releases',
+  termRoadmap: 'https://github.com/solitonhq/soliton-term/blob/main/ROADMAP.md',
+  termLimits: 'https://github.com/solitonhq/soliton-term/blob/main/SECURITY.md#known-limitations',
   rudderRepo: 'https://github.com/solitonhq/soliton-rudder',
   rudderReleases: 'https://github.com/solitonhq/soliton-rudder/releases',
   rudderInstallGuide: 'https://github.com/solitonhq/soliton-rudder/blob/main/docs/INSTALL.md#opening-an-unsigned-build',

@@ -17,6 +17,22 @@ export interface Screen {
   image: ImageMetadata;
   copy: Record<Locale, { label: string; alt: string; body: string }>;
 }
+export interface ExtraLink { label: string; href: string; external?: boolean }
+/** Longer, optional sections shown below the feature grid on a product's own page. */
+export interface ProductExtras {
+  fitsTitle: string;
+  /** "When you would reach for it": a situation and what the tool gives you. */
+  fits: { situation: string; answer: string }[];
+  requirementsTitle: string;
+  requirements: string[];
+  /** Steps for the first launch, with an optional command to copy. */
+  firstLaunch?: { title: string; steps: string[]; command?: string };
+  verifyNote: string;
+  links: ExtraLink[];
+  roadmapTitle: string;
+  roadmapLead: string;
+  roadmap: string[];
+}
 export interface ProductCopy {
   /** One line, used in the index strip and on the products page. */
   tagline: string;
@@ -27,12 +43,17 @@ export interface ProductCopy {
   points: string[];
   /** Feature cells on the home page. */
   features: Feature[];
+  /** A longer feature list for the product's own page, when it differs from the home summary. */
+  detailFeatures?: Feature[];
+  /** Search-engine description, when longer than the summary. */
+  seoDescription?: string;
   /** Optional trust notes shown under the screenshots. */
   notes?: Feature[];
   /** Rows of the terminal-style details box. */
   meta: MetaRow[];
   /** Text beside the call to action. */
   blurb: string;
+  extras?: ProductExtras;
 }
 
 export interface Product {
@@ -47,8 +68,6 @@ export interface Product {
   featured?: boolean;
   /** Facts used for search-engine structured data. */
   seo?: { os?: string; license?: string; version?: string; downloadUrl?: string };
-  /** True when the product has a hand-written page under src/pages instead of the generated one. */
-  customPage?: boolean;
   /** Public GitHub repository, once it exists. */
   repo?: string;
   screens?: Screen[];
@@ -76,45 +95,144 @@ export const products: Product[] = [
     slug: 'term',
     name: 'Soliton Term',
     short: 'Term',
-    status: 'incoming',
+    status: 'released',
+    repo: site.termRepo,
+    seo: { os: 'macOS 12 or later', license: 'https://www.apache.org/licenses/LICENSE-2.0', version: site.termVersion, downloadUrl: site.termReleases },
+    actions: [
+      { label: { en: 'Download for macOS', tr: 'macOS için indir' }, href: site.termReleases, primary: true, external: true },
+      { label: { en: 'Roadmap', tr: 'Yol haritası' }, href: site.termRoadmap, external: true },
+      { label: { en: 'GitHub', tr: 'GitHub' }, href: site.termRepo, external: true },
+    ],
     copy: {
       en: {
         tagline: 'SSH and terminal, organised.',
         headline: 'Your terminal, finally organised.',
-        description: 'An SSH session manager and local terminal that takes the friction out of daily server work. Your hosts, your snippets and your secrets, one keystroke away.',
-        points: ['Snippets and a secure vault', 'Alias injection for every host', 'Fast, keyboard-first workflow'],
+        description: 'A native macOS SSH and remote server manager with an encrypted vault, built with Tauri and Rust on top of your system’s own OpenSSH.',
+        points: ['Keychain-backed encrypted vault', 'Folders, tabs and multi-exec', 'Snippets and session-only aliases'],
         features: [
-          { title: 'Session manager', body: 'Keep every SSH host and session in one place, next to a local terminal.' },
-          { title: 'Snippets', body: 'The commands you reach for daily, one keystroke away.' },
-          { title: 'Secure vault', body: 'Credentials stored securely, right where you connect.' },
-          { title: 'Alias injection', body: 'Your aliases follow you onto every host you connect to.' },
+          { title: 'Vault in the Keychain', body: 'Passwords and SSH keys are encrypted with AES-256-GCM. The master key lives in the macOS Keychain, not on disk.' },
+          { title: 'Folders and tabs', body: 'A drag-and-drop folder tree, multiple terminal tabs and your recent sessions one click away.' },
+          { title: 'Quick-copy bar', body: 'Copy the username, password or host:port of the active server in one click.' },
+          { title: 'Multi-exec', body: 'Send a command to selected tabs or to a whole folder at once.' },
+          { title: 'Parametric snippets', body: 'Reusable scripts with {{variables}} that ask for values before they run.' },
+          { title: 'Session-only aliases', body: 'Your aliases are injected in memory. Nothing is written to the remote host.' },
+          { title: '⌘K command palette', body: 'Connect, copy secrets, run snippets or switch themes without leaving the keyboard.' },
+          { title: 'Themes and palettes', body: 'Three app themes and eleven terminal palettes.' },
+        ],
+        notes: [
+          { title: 'Local-first', body: 'No accounts, no telemetry and no network client of its own.' },
+          { title: 'Encrypted at rest', body: 'AES-256-GCM vault with the master key in the macOS Keychain.' },
+          { title: 'Open source', body: 'Apache 2.0. Releases ship a checksum, an SBOM and an attestation.' },
+          { title: 'Honest about limits', body: 'Decrypted credentials live in the app while it runs, and there is no master password yet.' },
         ],
         meta: [
-          { k: 'status', v: 'incoming', accent: true },
-          { k: 'category', v: 'ssh manager · local terminal' },
-          { k: 'workflow', v: 'keyboard-first' },
-          { k: 'notify', v: 'github · watch releases', accent: true },
+          { k: 'version', v: site.termVersion, accent: true },
+          { k: 'macos', v: 'apple silicon & intel · 12+' },
+          { k: 'built on', v: 'tauri · rust · openssh' },
+          { k: 'signing', v: 'self-signed · not notarized' },
+          { k: 'verify', v: 'sha-256 · sbom · attestation' },
         ],
-        blurb: 'Soliton Term is in final preparation. Follow Soliton on GitHub: its repository appears there at launch, and Watch → Releases will notify you.',
+        blurb: `Soliton Term ${site.termVersion} is the first public release. Builds are signed with a self-signed identity and are not notarized, so macOS Gatekeeper warns on first launch. The steps below show how to open it.`,
+        extras: {
+          fitsTitle: 'Where it fits',
+          fits: [
+            { situation: 'You manage dozens of servers', answer: 'Folders, tabs and recent sessions keep every host one click away, and the quick-copy bar hands you the credentials.' },
+            { situation: 'The same check on many hosts', answer: 'Multi-exec runs one command on selected tabs or a whole folder at once.' },
+            { situation: 'Diagnostics you keep repeating', answer: 'Snippets with {{variables}} ask for the values, then run.' },
+            { situation: 'Someone else’s server, your habits', answer: 'Session-only aliases are injected in memory, so nothing lands in the remote shell profile or history.' },
+          ],
+          requirementsTitle: 'Requirements',
+          requirements: ['macOS 12 or later (Apple silicon and Intel)', 'Uses your system’s own OpenSSH'],
+          firstLaunch: {
+            title: 'First launch',
+            steps: [
+              'Open the DMG and drag Soliton Term to Applications.',
+              'macOS warns because the app is not notarized. Clear the quarantine flag once:',
+              'macOS then asks once whether Soliton Term may use its Keychain item. Enter your login password and choose Always Allow.',
+            ],
+            command: 'xattr -cr "/Applications/Soliton Term.app"',
+          },
+          verifyNote: 'Every release ships SHA-256 checksums, a build provenance attestation and a CycloneDX SBOM.',
+          links: [
+            { label: 'Verify your download', href: '/verify/' },
+            { label: 'Known limitations', href: site.termLimits, external: true },
+            { label: 'All releases', href: site.termReleases, external: true },
+          ],
+          roadmapTitle: 'What is next',
+          roadmapLead: 'Direction, not a promise. The full plan is in the repository.',
+          roadmap: [
+            'Keep decrypted secrets out of the WebView, with an optional master password and lock screen',
+            'One-click reconnect for dropped sessions',
+            '~/.ssh/config import and jump hosts (ProxyJump)',
+            'SFTP browser, port forwarding and split panes',
+            'Notarized builds once an Apple Developer ID is available',
+          ],
+        },
       },
       tr: {
         tagline: 'SSH ve terminal, düzenli.',
         headline: 'Terminaliniz, nihayet düzenli.',
-        description: 'Günlük sunucu işlerindeki sürtünmeyi azaltan bir SSH oturum yöneticisi ve yerel terminal. Sunucularınız, snippet’leriniz ve sırlarınız tek tuş uzağınızda.',
-        points: ['Snippet’ler ve güvenli kasa', 'Her sunucu için alias enjeksiyonu', 'Hızlı, klavye odaklı akış'],
+        description: 'Şifreli bir kasası olan, Tauri ve Rust ile sistemin kendi OpenSSH’ı üzerine kurulmuş yerel bir macOS SSH ve uzak sunucu yöneticisi.',
+        points: ['Keychain destekli şifreli kasa', 'Klasörler, sekmeler ve çoklu çalıştırma', 'Snippet’ler ve yalnızca oturuma özel alias’lar'],
         features: [
-          { title: 'Oturum yöneticisi', body: 'Tüm SSH sunucularınızı ve oturumlarınızı yerel terminalin yanında tek yerde tutun.' },
-          { title: 'Snippet’ler', body: 'Her gün kullandığınız komutlar tek tuş uzağınızda.' },
-          { title: 'Güvenli kasa', body: 'Kimlik bilgileri, bağlandığınız yerde güvenle saklanır.' },
-          { title: 'Alias enjeksiyonu', body: 'Alias’larınız bağlandığınız her sunucuya sizinle gelir.' },
+          { title: 'Keychain’de kasa', body: 'Parolalar ve SSH anahtarları AES-256-GCM ile şifrelenir. Ana anahtar diskte değil, macOS Keychain’de durur.' },
+          { title: 'Klasörler ve sekmeler', body: 'Sürükle-bırak klasör ağacı, birden çok terminal sekmesi ve son oturumlarınız tek tık uzağınızda.' },
+          { title: 'Hızlı kopyalama çubuğu', body: 'Aktif sunucunun kullanıcı adını, parolasını veya host:port bilgisini tek tıkla kopyalayın.' },
+          { title: 'Çoklu çalıştırma', body: 'Bir komutu seçili sekmelere ya da bir klasörün tamamına aynı anda gönderin.' },
+          { title: 'Parametreli snippet’ler', body: '{{değişkenler}} içeren, çalışmadan önce değerleri soran yeniden kullanılabilir betikler.' },
+          { title: 'Oturuma özel alias’lar', body: 'Alias’larınız bellekte enjekte edilir. Uzak sunucuya hiçbir şey yazılmaz.' },
+          { title: '⌘K komut paleti', body: 'Klavyeden çıkmadan bağlanın, sırları kopyalayın, snippet çalıştırın veya tema değiştirin.' },
+          { title: 'Temalar ve paletler', body: 'Üç uygulama teması ve on bir terminal paleti.' },
+        ],
+        notes: [
+          { title: 'Önce yerel', body: 'Hesap yok, telemetri yok, kendi ağ istemcisi yok.' },
+          { title: 'Diskte şifreli', body: 'AES-256-GCM kasa; ana anahtar macOS Keychain’de.' },
+          { title: 'Açık kaynak', body: 'Apache 2.0. Sürümler sağlama toplamı, SBOM ve attestation ile gelir.' },
+          { title: 'Sınırları konusunda dürüst', body: 'Çözülmüş kimlik bilgileri uygulama çalışırken bellekte durur ve henüz ana parola yok.' },
         ],
         meta: [
-          { k: 'durum', v: 'yolda', accent: true },
-          { k: 'kategori', v: 'ssh yöneticisi · yerel terminal' },
-          { k: 'akış', v: 'klavye odaklı' },
-          { k: 'bildirim', v: 'github · releases izle', accent: true },
+          { k: 'sürüm', v: site.termVersion, accent: true },
+          { k: 'macos', v: 'apple silicon ve intel · 12+' },
+          { k: 'altyapı', v: 'tauri · rust · openssh' },
+          { k: 'imza', v: 'kendinden imzalı · notarize değil' },
+          { k: 'doğrula', v: 'sha-256 · sbom · attestation' },
         ],
-        blurb: 'Soliton Term son hazırlıklarda. GitHub’da Soliton’u takip edin: depo çıkışta orada belirir ve Watch → Releases size haber verir.',
+        blurb: `Soliton Term ${site.termVersion} ilk herkese açık sürümdür. Sürümler kendinden imzalı bir kimlikle imzalıdır ve notarize edilmemiştir; bu yüzden macOS Gatekeeper ilk açılışta uyarır. Aşağıdaki adımlar nasıl açacağınızı gösterir.`,
+        extras: {
+          fitsTitle: 'Nerede işe yarar',
+          fits: [
+            { situation: 'Onlarca sunucu yönetiyorsunuz', answer: 'Klasörler, sekmeler ve son oturumlar her sunucuyu tek tık uzağınızda tutar; hızlı kopyalama çubuğu kimlik bilgilerini verir.' },
+            { situation: 'Aynı kontrol birçok sunucuda', answer: 'Çoklu çalıştırma tek komutu seçili sekmelerde ya da bir klasörün tamamında aynı anda çalıştırır.' },
+            { situation: 'Sürekli tekrarladığınız tanılar', answer: '{{değişkenli}} snippet’ler değerleri sorar, sonra çalışır.' },
+            { situation: 'Başkasının sunucusu, sizin alışkanlıklarınız', answer: 'Oturuma özel alias’lar bellekte enjekte edilir; uzak kabuk profiline ya da geçmişe hiçbir şey yazılmaz.' },
+          ],
+          requirementsTitle: 'Gereksinimler',
+          requirements: ['macOS 12 veya üstü (Apple silicon ve Intel)', 'Sistemin kendi OpenSSH’ını kullanır'],
+          firstLaunch: {
+            title: 'İlk açılış',
+            steps: [
+              'DMG’yi açın ve Soliton Term’ü Applications’a sürükleyin.',
+              'Uygulama notarize edilmediği için macOS uyarır. Karantina bayrağını bir kez temizleyin:',
+              'macOS ardından Soliton Term’ün Keychain öğesini kullanıp kullanamayacağını bir kez sorar. Oturum parolanızı girin ve Always Allow’u seçin.',
+            ],
+            command: 'xattr -cr "/Applications/Soliton Term.app"',
+          },
+          verifyNote: 'Her sürüm SHA-256 sağlama toplamları, bir derleme kaynağı attestation’ı ve CycloneDX SBOM ile gelir.',
+          links: [
+            { label: 'İndirmeyi doğrulayın', href: '/verify/' },
+            { label: 'Bilinen kısıtlar', href: site.termLimits, external: true },
+            { label: 'Tüm sürümler', href: site.termReleases, external: true },
+          ],
+          roadmapTitle: 'Sırada ne var',
+          roadmapLead: 'Söz değil, yön. Tam plan depoda.',
+          roadmap: [
+            'Çözülmüş sırları WebView’dan uzak tutmak; isteğe bağlı ana parola ve kilit ekranı',
+            'Kopan oturumlar için tek tıkla yeniden bağlanma',
+            '~/.ssh/config içe aktarma ve jump host’lar (ProxyJump)',
+            'SFTP tarayıcısı, port yönlendirme ve bölünmüş paneller',
+            'Apple Developer ID alındığında notarize edilmiş sürümler',
+          ],
+        },
       },
     },
   },
@@ -124,7 +242,6 @@ export const products: Product[] = [
     short: 'Rudder',
     status: 'prerelease',
     featured: true,
-    customPage: true,
     seo: { os: 'macOS 12 or later', license: 'https://www.apache.org/licenses/LICENSE-2.0', version: site.rudderVersion, downloadUrl: site.rudderReleases },
     repo: site.rudderRepo,
     screens: shotOrder.map(shot),
@@ -159,6 +276,28 @@ export const products: Product[] = [
           { k: 'verify', v: 'sha-256 · sbom · attestation' },
         ],
         blurb: rudder.en.installBody,
+        detailFeatures: rudder.en.features,
+        seoDescription: rudder.en.description,
+        extras: {
+          fitsTitle: 'Where it fits',
+          fits: [
+            { situation: 'A rollout is failing', answer: 'Events follow ownership, so a Deployment shows the events of the pods it owns. Runbooks and multi-pod logs take you to the cause.' },
+            { situation: 'You inherit a cluster', answer: 'An assessment runs 30+ read-only checks and scores the cluster with fix guidance, so you start from findings instead of guesses.' },
+            { situation: 'Before you change something', answer: 'The what-if simulator answers whether A can reach B under your NetworkPolicies and previews a node drain. Changes are dry-run first.' },
+            { situation: 'Reviewing the cloud bill', answer: 'Cost analysis compares requests with real usage to spot waste per workload.' },
+          ],
+          requirementsTitle: rudder.en.requirementsTitle,
+          requirements: rudder.en.requirements,
+          verifyNote: rudder.en.verifyNote,
+          links: [
+            { label: 'Verify your download', href: '/verify/' },
+            { label: rudder.en.installGuide, href: site.rudderInstallGuide, external: true },
+            { label: rudder.en.allReleases, href: site.rudderReleases, external: true },
+          ],
+          roadmapTitle: rudder.en.roadmapTitle,
+          roadmapLead: rudder.en.roadmapLead,
+          roadmap: rudder.en.roadmap,
+        },
       },
       tr: {
         tagline: 'Kubernetes, güvenle yönlendirilir.',
@@ -184,6 +323,28 @@ export const products: Product[] = [
           { k: 'doğrula', v: 'sha-256 · sbom · attestation' },
         ],
         blurb: rudder.tr.installBody,
+        detailFeatures: rudder.tr.features,
+        seoDescription: rudder.tr.description,
+        extras: {
+          fitsTitle: 'Nerede işe yarar',
+          fits: [
+            { situation: 'Bir dağıtım başarısız oluyor', answer: 'Olaylar sahipliği izler: bir Deployment, sahip olduğu pod’ların olaylarını gösterir. Runbook’lar ve çoklu pod logları sizi nedene götürür.' },
+            { situation: 'Bir cluster devraldınız', answer: 'Bir değerlendirme 30’dan fazla salt okunur kontrol çalıştırır ve cluster’ı çözüm rehberiyle puanlar; tahminle değil bulgularla başlarsınız.' },
+            { situation: 'Bir şeyi değiştirmeden önce', answer: 'What-if simülatörü, NetworkPolicy’lerinize göre A’nın B’ye erişip erişemeyeceğini yanıtlar ve node drain’i önceden gösterir. Değişiklikler önce dry-run ile çalışır.' },
+            { situation: 'Bulut faturasını gözden geçirirken', answer: 'Maliyet analizi, iş yükü başına israfı bulmak için istekleri gerçek kullanımla karşılaştırır.' },
+          ],
+          requirementsTitle: rudder.tr.requirementsTitle,
+          requirements: rudder.tr.requirements,
+          verifyNote: rudder.tr.verifyNote,
+          links: [
+            { label: 'İndirmeyi doğrulayın', href: '/verify/' },
+            { label: rudder.tr.installGuide, href: site.rudderInstallGuide, external: true },
+            { label: rudder.tr.allReleases, href: site.rudderReleases, external: true },
+          ],
+          roadmapTitle: rudder.tr.roadmapTitle,
+          roadmapLead: rudder.tr.roadmapLead,
+          roadmap: rudder.tr.roadmap,
+        },
       },
     },
   },
@@ -281,7 +442,7 @@ export const products: Product[] = [
   },
 ];
 
-/** Detail page of a product. Generated for every product unless it sets `customPage`. */
+/** Detail page of a product. Generated for every product. */
 export function productPath(p: Product): string {
   return `/products/soliton-${p.slug}/`;
 }
