@@ -23,6 +23,7 @@ export interface HomeCopy {
     detailsLabel: string;
     incomingWord: string;
     allFeatures: string;
+    featuresLabel: string;
     stars: string;
     downloads: string;
   };
@@ -66,6 +67,7 @@ export const home: Record<Locale, HomeCopy> = {
       detailsLabel: 'Details',
       incomingWord: 'incoming',
       allFeatures: 'All features',
+      featuresLabel: 'Features',
       stars: 'GitHub stars',
       downloads: 'Downloads',
     },
@@ -137,6 +139,7 @@ export const home: Record<Locale, HomeCopy> = {
       detailsLabel: 'Ayrıntılar',
       incomingWord: 'yolda',
       allFeatures: 'Tüm özellikler',
+      featuresLabel: 'Özellikler',
       stars: 'GitHub yıldızı',
       downloads: 'İndirme',
     },
