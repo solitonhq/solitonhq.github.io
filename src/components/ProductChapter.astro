@@ -62,7 +62,7 @@ const title = incoming ? `${p.name} · ${h.incomingWord}` : `${p.name}${p.seo?.v
               <p class="scap"><strong>{s.copy[locale].label}.</strong> {s.copy[locale].body}</p>
             </div>
           ))}
-          <p class="demo">{p.demoNote?.[locale] ?? h.demoNote}</p>
+          {!limit && <p class="demo">{p.demoNote?.[locale] ?? h.demoNote}</p>}
         </div>
       ) : (
         <div class="teaser" role="img" aria-label={`${p.name} ${h.teaserLabel}`}>
@@ -79,7 +79,7 @@ const title = incoming ? `${p.name} · ${h.incomingWord}` : `${p.name}${p.seo?.v
         </div>
       )}
 
-      {c.notes && c.notes.length > 0 && (
+      {!limit && c.notes && c.notes.length > 0 && (
         <div class="notes">
           {c.notes.map((x) => <div><b>{x.title}</b><span>{x.body}</span></div>)}
         </div>
@@ -173,8 +173,10 @@ const title = incoming ? `${p.name} · ${h.incomingWord}` : `${p.name}${p.seo?.v
   .more a { color: var(--accent); }
   .more a:hover { text-decoration: underline; }
   .grid { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--line); border-left: 1px solid var(--line); margin-top: 56px; }
-  .cell { background: var(--bg); padding: 26px 24px 30px; transition: background .2s; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .cell { position: relative; background: var(--bg); padding: 26px 24px 30px; transition: background .2s; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
   .tk-alt .cell { background: var(--bg-2); }
+  .cell::after { content: ''; position: absolute; left: 0; top: 0; height: 2px; width: 0; background: var(--accent); transition: width .35s; }
+  .cell:hover::after { width: 100%; }
   .cell:hover, .tk-alt .cell:hover { background: var(--surface); }
   .cell .n { font-family: var(--font-mono); font-size: 11px; color: var(--accent); letter-spacing: .14em; margin-bottom: 40px; }
   .cell h3 { font-size: 17px; font-weight: 600; margin-bottom: 8px; letter-spacing: -.01em; }

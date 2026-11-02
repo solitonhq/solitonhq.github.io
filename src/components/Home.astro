@@ -5,6 +5,7 @@ import ProductStrip from './ProductStrip.astro';
 import Notify from './Notify.astro';
 import IncomingSection from './IncomingSection.astro';
 import Faq from './Faq.astro';
+import TrustBand from './TrustBand.astro';
 import { products, statusLabel } from '../i18n/products';
 import { home } from '../i18n/home';
 import { t, type Locale } from '../i18n/ui';
@@ -43,7 +44,9 @@ const [heroA, ...heroB] = t(locale, 'home.heroTitle').split('. ');
     {incoming.length > 0 && <IncomingSection locale={locale} items={incoming} />}
   </div>
 
-  <Faq locale={locale} />
+  <TrustBand locale={locale} />
+
+  <Faq locale={locale} omit={[1, 2]} />
 
   <Notify locale={locale} />
 
@@ -56,7 +59,8 @@ const [heroA, ...heroB] = t(locale, 'home.heroTitle').split('. ');
   .hero::after { content: ''; position: absolute; inset: auto 0 0 0; height: 220px; background: linear-gradient(transparent, var(--bg)); pointer-events: none; z-index: 1; }
   .hero-in { position: relative; z-index: 2; }
   .hero h1 { font-size: clamp(40px, 7.2vw, 92px); line-height: 1.02; letter-spacing: -.035em; font-weight: 600; margin: 22px 0 26px; max-width: 16ch; }
-  .hero h1 span { color: var(--muted); }
+  .hero h1 span { background: linear-gradient(100deg, #e9eef3 0%, var(--accent) 85%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(55% 60% at 78% 8%, color-mix(in srgb, var(--accent) 13%, transparent), transparent 70%); pointer-events: none; }
   .lede { font-size: clamp(17px, 1.7vw, 21px); color: var(--muted); max-width: 58ch; }
   .cta { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 36px; }
 
