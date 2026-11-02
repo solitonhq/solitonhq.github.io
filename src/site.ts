@@ -3,7 +3,7 @@ export const site = {
   name: 'Soliton',
   githubOrg: 'https://github.com/solitonhq',
   /** Current Rudder release. Update here and every page, in both languages, follows. */
-  rudderVersion: '0.2.1',
+  rudderVersion: '0.2.4',
   /** Current Soliton Term release. */
   termVersion: '0.1.1',
   termRepo: 'https://github.com/solitonhq/soliton-term',
