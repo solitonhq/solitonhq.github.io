@@ -1,9 +1,10 @@
 ---
 import { faq } from '../i18n/faq';
 import { localePath, type Locale } from '../i18n/ui';
-interface Props { locale: Locale; }
-const { locale } = Astro.props;
+interface Props { locale: Locale; /** Indexes of questions to leave out, e.g. ones another section on the page already answers. */ omit?: number[]; }
+const { locale, omit = [] } = Astro.props;
 const c = faq[locale];
+const items = c.items.filter((_, i) => !omit.includes(i));
 ---
 <section class="tk-section tk-rule" id="faq">
   <div class="tk-wrap">
@@ -13,7 +14,7 @@ const c = faq[locale];
       <p>{c.lead}</p>
     </div>
     <div class="list tk-rv">
-      {c.items.map((it) => (
+      {items.map((it) => (
         <details>
           <summary>{it.q}</summary>
           <div class="a">

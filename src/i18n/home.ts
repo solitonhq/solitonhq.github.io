@@ -37,6 +37,7 @@ export interface HomeCopy {
     note: string;
   };
   incoming: { eyebrow: string; title: string; lead: string };
+  trust: { eyebrow: string; title: string; lead: string; items: { title: string; body: string }[]; verify: string; privacy: string };
   oss: { body: string };
   product: { back: string; moreTools: string; viewDetails: string; allProducts: string };
 }
@@ -97,6 +98,19 @@ export const home: Record<Locale, HomeCopy> = {
       title: 'More tools are on the way.',
       lead: 'Each does one job. Follow Soliton on GitHub to hear when one lands.',
     },
+    trust: {
+      eyebrow: 'Why trust it',
+      title: 'Built to be checked, not just believed.',
+      lead: 'The same four commitments apply to every Soliton tool.',
+      items: [
+        { title: 'Local-first', body: 'No accounts and no telemetry. Credentials stay on your machine, in your kubeconfig or the macOS Keychain.' },
+        { title: 'Open source', body: 'Every repository is Apache 2.0. Read it, build it, fork it.' },
+        { title: 'Verifiable releases', body: 'Each download ships a SHA-256 checksum, an SBOM and a build attestation. Verify before you run.' },
+        { title: 'Honest status', body: 'Every product states its real stage. Screenshots use demo data, and known limits are written down.' },
+      ],
+      verify: 'Verify your download',
+      privacy: 'Privacy',
+    },
     oss: { body: 'Soliton is developed publicly. Issues and pull requests are welcome.' },
     product: { back: 'All products', moreTools: 'More Soliton tools', viewDetails: 'View details', allProducts: 'All products' },
   },
@@ -154,6 +168,19 @@ export const home: Record<Locale, HomeCopy> = {
       eyebrow: 'Yolda',
       title: 'Daha fazla araç yolda.',
       lead: 'Her biri tek bir iş yapar. Biri çıktığında haberdar olmak için Soliton’u GitHub’da takip edin.',
+    },
+    trust: {
+      eyebrow: 'Neden güvenilir',
+      title: 'İnanmak için değil, denetlemek için yapıldı.',
+      lead: 'Aynı dört taahhüt her Soliton aracı için geçerli.',
+      items: [
+        { title: 'Önce yerel', body: 'Hesap yok, telemetri yok. Kimlik bilgileri makinenizde, kubeconfig’inizde ya da macOS Keychain’de kalır.' },
+        { title: 'Açık kaynak', body: 'Her repo Apache 2.0. Okuyun, derleyin, fork’layın.' },
+        { title: 'Doğrulanabilir sürümler', body: 'Her indirme SHA-256 sağlama toplamı, SBOM ve derleme attestation’ı ile gelir. Çalıştırmadan önce doğrulayın.' },
+        { title: 'Dürüst durum', body: 'Her ürün gerçek aşamasını söyler. Ekran görüntüleri demo verisidir, bilinen sınırlar yazılıdır.' },
+      ],
+      verify: 'İndirmenizi doğrulayın',
+      privacy: 'Gizlilik',
     },
     oss: { body: 'Soliton herkesin gözü önünde geliştirilir. Issue ve pull request’ler memnuniyetle karşılanır.' },
     product: { back: 'Tüm ürünler', moreTools: 'Diğer Soliton araçları', viewDetails: 'Ayrıntıları gör', allProducts: 'Tüm ürünler' },

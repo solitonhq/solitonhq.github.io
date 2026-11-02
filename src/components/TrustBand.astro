@@ -1,0 +1,43 @@
+---
+import { home } from '../i18n/home';
+import { localePath, type Locale } from '../i18n/ui';
+interface Props { locale: Locale; }
+const { locale } = Astro.props;
+const t = home[locale].trust;
+const n = (i: number) => String(i + 1).padStart(2, '0');
+---
+<section class="tk-section tk-rule" id="trust">
+  <div class="tk-wrap">
+    <div class="tk-head tk-rv">
+      <div class="tk-eyebrow">{t.eyebrow}</div>
+      <h2>{t.title}</h2>
+      <p>{t.lead}</p>
+    </div>
+    <div class="grid tk-rv">
+      {t.items.map((it, i) => (
+        <div class="cell"><div class="n">{n(i)}</div><h3>{it.title}</h3><p>{it.body}</p></div>
+      ))}
+    </div>
+    <p class="links tk-rv">
+      <a href={localePath(locale, '/verify/')}>{t.verify} →</a>
+      <a href={localePath(locale, '/privacy/')}>{t.privacy} →</a>
+    </p>
+  </div>
+</section>
+
+<style>
+  .links { display: flex; flex-wrap: wrap; gap: 8px 28px; margin-top: 22px; font-family: var(--font-mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; }
+  .links a { color: var(--accent); }
+  .links a:hover { text-decoration: underline; }
+  #trust { padding: 110px 0; }
+  .grid { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
+  .cell { position: relative; background: var(--bg); padding: 28px 24px 32px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); transition: background .2s; }
+  .cell::after { content: ''; position: absolute; left: 0; top: 0; height: 2px; width: 0; background: var(--accent); transition: width .35s; }
+  .cell:hover { background: var(--surface); }
+  .cell:hover::after { width: 100%; }
+  .cell .n { font-family: var(--font-mono); font-size: 11px; color: var(--accent); letter-spacing: .14em; margin-bottom: 40px; }
+  .cell h3 { font-size: 18px; font-weight: 600; letter-spacing: -.01em; margin-bottom: 10px; }
+  .cell p { color: var(--muted); font-size: 14.5px; line-height: 1.6; }
+  @media (max-width: 960px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px) { .grid { grid-template-columns: 1fr; } }
+</style>
