@@ -27,7 +27,7 @@
   "devDependencies": {
     "@astrojs/check": "0.9.12",
     "@lhci/cli": "0.15.1",
-    "html-validate": "11.17.0",
+    "html-validate": "11.18.0",
     "typescript": "6.0.3"
   }
 }
